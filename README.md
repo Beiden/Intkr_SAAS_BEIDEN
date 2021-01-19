@@ -16,6 +16,7 @@ API接口文档：http://api.doc.intkr.com/admin/api/info/mgr/api.html?app_id=10
 
 主题使用文档：http://default.theme.doc.intkr.com
 
+
 # 使用须知
 ✅允许
 
@@ -30,7 +31,7 @@ API接口文档：http://api.doc.intkr.com/admin/api/info/mgr/api.html?app_id=10
 希望大家多多支持原创作品
 
 
-#如何交流、反馈、参与贡献？
+# 如何交流、反馈、参与贡献？
 
 官方社区：http://shop.intkr.com
 
@@ -42,5 +43,6 @@ github仓库：https://github.com/Beiden/Intkr_SAAS_BEIDEN
 
 技术讨论、二次开发等咨询、问题和建议，请移步到官方社区，我会在第一时间进行解答和回复！
 
-#开发计划
+
+# 开发计划
 1 
