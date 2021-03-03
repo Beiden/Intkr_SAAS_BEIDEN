@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="statisticsCode">
+
+	<resultMap id="StatisticsCodeDO" type="com.intkr.saas.domain.dbo.sys.StatisticsCodeDO"> 
+        <result property="id" column="id"/> 
+        <result property="type" column="type"/> 
+        <result property="name" column="name"/> 
+        <result property="code" column="code"/> 
+        <result property="note" column="note"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.sys.StatisticsCodeDO">
+		insert into
+			sys_statistics_code(id , type , name , code , note , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{type} , #{name} , #{code} , #{note} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			sys_statistics_code
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			sys_statistics_code
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.sys.StatisticsCodeDO">
+		update 
+			sys_statistics_code 
+		set 
+			<if test="type != null and type != ''">  
+			    type = #{type} , 
+			</if> 
+			<if test="name != null and name != ''">  
+			    name = #{name} , 
+			</if> 
+			<if test="code != null and code != ''">  
+			    code = #{code} , 
+			</if> 
+			<if test="note != null and note != ''">  
+			    note = #{note} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="StatisticsCodeDO">
+		select
+			*
+		from
+			sys_statistics_code
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="code != null and code != ''">  
+			    and status = #{code} 
+			</if>  
+			<if test="note != null and note != ''">  
+			    and note = #{note} 
+			</if>  
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+		    order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			sys_statistics_code
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="code != null and code != ''">  
+			    and code = #{code} 
+			</if>  
+			<if test="note != null and note != ''">  
+			    and note = #{note} 
+			</if>  
+	</select>
+
+</mapper> 

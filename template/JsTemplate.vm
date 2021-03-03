@@ -1,0 +1,83 @@
+var {{className}} = {};
+{{className}}.addUpdaterVerify = function(){
+	/*
+	var name = $(".addUpdateStaffFrame").contents().find(".form input[name=name]").val();
+	if(name.length == 0){
+		Dialog.alertInfo.show("请输入职位姓名！");
+		return false;
+	}
+	*/
+	return true;
+}
+{{className}}.updater = {};
+{{className}}.updater.show = function({{classNameProperty}}Id,callback){
+	var message = 	"<div class='commentReplyEditor' style='margin:-20px;'>"
+					+'	<iframe class="addUpdateStaffFrame" src="/admin{{subDirectory}}/dialog/{{classNameProperty}}AddUpdate.html?{{classNameProperty}}Id='+{{classNameProperty}}Id+'" width="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="auto" allowtransparency="yes" style="height:320px;">' 
+					+'		脚本之家使用了框架技术，但是您的浏览器不支持框架，请升级您的浏览器以便正常访问脚本之家。 '
+					+'	</iframe>'
+					+"</div>";
+	bootbox.dialog({
+		title: "<div class='text-center'><i class='fa fa-edit'></i> 编辑{{tableDesc}}</div>",
+		message: message,
+		buttons: {
+			success: {
+				label: "<i class='fa fa-check-circle'></i> 确认",
+				className: "btn-success",
+				callback: function() {
+					if(!{{className}}.addUpdaterVerify()){
+						return false;
+					}
+					Dialog.running.show();
+					IK.post($(".addUpdateStaffFrame").contents().find(".form").serialize(),function(resultJs){
+						Dialog.running.close();
+						if(resultJs.result && callback){
+			            	callback(resultJs);
+			            }else if(!resultJs.result){
+			            	Dialog.alertInfo.show(resultJs.msg);
+			            }
+					});
+				}
+			},
+			main: {
+				label: "<i class='fa fa-times-circle'></i> 取消",
+				className: "btn-primary"
+			}
+		}
+	});
+}
+{{className}}.adder = {};
+{{className}}.adder.show = function(callback){
+	var message = 	"<div class='commentReplyEditor' style='margin:-20px;'>"
+					+'	<iframe class="addUpdateStaffFrame" src="/admin{{subDirectory}}/dialog/{{classNameProperty}}AddUpdate.html" width="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="auto" allowtransparency="yes" style="height:320px;">' 
+					+'		脚本之家使用了框架技术，但是您的浏览器不支持框架，请升级您的浏览器以便正常访问脚本之家。 '
+					+'	</iframe>'
+					+"</div>";
+	bootbox.dialog({
+		title: "<div class='text-center'><i class='fa fa-plus-circle'></i> 新增{{tableDesc}}</div>",
+		message: message,
+		buttons: {
+			success: {
+				label: "<i class='fa fa-check-circle'></i> 确认",
+				className: "btn-success",
+				callback: function() {
+					if(!{{className}}.addUpdaterVerify()){
+						return false;
+					}
+					Dialog.running.show();
+					IK.post($(".addUpdateStaffFrame").contents().find(".form").serialize(),function(resultJs){
+						Dialog.running.close();
+						if(resultJs.result && callback){
+			            	callback(resultJs);
+			            }else if(!resultJs.result){
+			            	Dialog.alertInfo.show(resultJs.msg);
+			            }
+					});
+				}
+			},
+			main: {
+				label: "<i class='fa fa-times-circle'></i> 取消",
+				className: "btn-primary"
+			}
+		}
+	});
+}

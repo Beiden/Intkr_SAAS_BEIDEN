@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="item">
+
+	<resultMap id="ItemDO" type="com.intkr.saas.domain.dbo.item.ItemDO"> 
+        <result property="id" column="id"/> 
+        <result property="saasId" column="saas_id"/> 
+        <result property="firstCategoryId" column="first_category_id"/> 
+        <result property="secondCategoryId" column="second_category_id"/> 
+        <result property="thirdCategoryId" column="third_category_id"/> 
+        <result property="shopId" column="shop_id"/> 
+        <result property="tradeMethod" column="trade_method"/> 
+        <result property="type" column="type"/> 
+        <result property="name" column="name"/> 
+        <result property="slogan" column="slogan"/> 
+        <result property="price" column="price"/> 
+        <result property="status" column="status"/> 
+        <result property="inventoryStatus" column="inventory_status"/> 
+        <result property="imgIds" column="img_ids"/> 
+        <result property="tagIds" column="tag_ids"/> 
+        <result property="content" column="content"/> 
+        <result property="skuType" column="sku_type"/> 
+        <result property="deliveryFeeId" column="delivery_fee_id"/> 
+        <result property="feature" column="feature"/> 
+        <result property="sort" column="sort"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.item.ItemDO">
+		insert into
+            item_tab
+			(id , saas_id , first_category_id , second_category_id , third_category_id , shop_id , type , trade_method , name , slogan , price , status , inventory_status , img_ids , tag_ids , content , feature , sku_type , sort , delivery_fee_id , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{firstCategoryId} , #{secondCategoryId} , #{thirdCategoryId} , #{shopId} , #{type} , #{tradeMethod} , #{name} , #{slogan} , #{price} , #{status} , #{inventoryStatus} , #{imgIds} , #{tagIds} , #{content} , #{feature} , #{skuType} , #{sort} , #{deliveryFeeId} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+            item_tab
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+            item_tab
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.item.ItemDO">
+		update 
+            item_tab
+		set 
+			<if test="saasId != null and saasId != ''">  
+			    saas_id = #{saasId} , 
+			</if> 
+			<if test="firstCategoryId != null and firstCategoryId != ''">  
+			    first_category_id = #{firstCategoryId} , 
+			</if> 
+			<if test="secondCategoryId != null and secondCategoryId != ''">  
+			    second_category_id = #{secondCategoryId} , 
+			</if> 
+			<if test="thirdCategoryId != null and thirdCategoryId != ''">  
+			    third_category_id = #{thirdCategoryId} , 
+			</if> 
+			<if test="shopId != null and shopId != ''">  
+			    shop_id = #{shopId} , 
+			</if> 
+			<if test="tradeMethod != null and tradeMethod != ''">  
+			    trade_method = #{tradeMethod} , 
+			</if> 
+			<if test="type != null and type != ''">  
+			    type = #{type} , 
+			</if> 
+			<if test="name != null and name != ''">  
+			    name = #{name} , 
+			</if> 
+			<if test="slogan != null and slogan != ''">  
+			    slogan = #{slogan} , 
+			</if> 
+			<if test="price != null and price != ''">  
+			    price = #{price} , 
+			</if> 
+			<if test="status != null and status != ''">  
+			    status = #{status} , 
+			</if> 
+			<if test="inventoryStatus != null and inventoryStatus != ''">  
+			    inventory_status = #{inventoryStatus} , 
+			</if> 
+			<if test="imgIds != null and imgIds != ''">  
+			    img_ids = #{imgIds} , 
+			</if> 
+			<if test="tagIds != null and tagIds != ''">  
+			    tag_ids = #{tagIds} , 
+			</if> 
+			<if test="content != null and content != ''">  
+			    content = #{content} , 
+			</if> 
+			<if test="feature != null and feature != ''">  
+			    feature = #{feature} , 
+			</if> 
+			<if test="skuType != null and skuType != ''">  
+			    sku_type = #{skuType} , 
+			</if> 
+			<if test="sort != null and sort != ''">  
+			    sort = #{sort} , 
+			</if> 
+			<if test="deliveryFeeId != null and deliveryFeeId != ''">  
+			    delivery_fee_id = #{deliveryFeeId} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="ItemDO">
+		select
+			*
+		from
+            item_tab
+		where 
+			is_deleted = 0
+			<if test="saasId != null and saasId != ''">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="firstCategoryId != null and firstCategoryId != ''">  
+			    and first_category_id = #{firstCategoryId} 
+			</if>  
+			<if test="secondCategoryId != null and secondCategoryId != ''">  
+			    and second_category_id = #{secondCategoryId} 
+			</if>  
+			<if test="thirdCategoryId != null and thirdCategoryId != ''">  
+			    and third_category_id = #{thirdCategoryId} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+			    and shop_id = #{shopId} 
+			</if>  
+			<if test="tradeMethod != null and tradeMethod != ''">  
+			    and trade_method = #{tradeMethod} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="slogan != null and slogan != ''">  
+			    and slogan = #{slogan} 
+			</if>  
+			<if test="status != null and status != ''">  
+			    and status = #{status} 
+			</if>  
+			<if test="inventoryStatus != null and inventoryStatus != ''">  
+			    and inventory_status = #{inventoryStatus} 
+			</if>  
+			<if test="imgIds != null and imgIds != ''">  
+			    and img_ids = #{imgIds} 
+			</if>  
+			<if test="tagIds != null and tagIds != ''">  
+			    and tag_ids = #{tagIds} 
+			</if>  
+			<if test="content != null and content != ''">  
+			    and content = #{content} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if>  
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="skuType != null and skuType != ''">  
+			    and sku_type = #{skuType} 
+			</if>  
+			<if test="sort != null and sort != ''">  
+			    and sort = #{sort} 
+			</if>  
+			<if test="query != null and query != '' and query.statusSet != null and query.statusSet != ''">  
+			    and status in 
+					<foreach item="statusTmp" collection="query.statusSet" open="(" separator="," close=")">
+		            	#{statusTmp}
+		        	</foreach>
+			</if>
+			<if test="query != null and query != '' and query.searchWordSQL != null and query.searchWordSQL != ''">  
+			    and name like #{query.searchWordSQL} 
+			</if>
+			<if test="query != null and query != '' and query.tagIdLikeSQL != null and query.tagIdLikeSQL != ''">  
+			    and tag_ids like #{query.tagIdLikeSQL} 
+			</if>
+			<if test="query != null and query != '' and query.ids != null and query.ids != ''">  
+			    and 
+			    	id in 
+			    		<foreach item="primary" collection="query.ids" open="(" separator="," close=")">
+							#{primary}
+						</foreach>
+			</if>
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+		    order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+            item_tab
+		where
+			is_deleted = 0
+			<if test="saasId != null and saasId != ''">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="firstCategoryId != null and firstCategoryId != ''">  
+			    and first_category_id = #{firstCategoryId} 
+			</if>  
+			<if test="secondCategoryId != null and secondCategoryId != ''">  
+			    and second_category_id = #{secondCategoryId} 
+			</if>  
+			<if test="thirdCategoryId != null and thirdCategoryId != ''">  
+			    and third_category_id = #{thirdCategoryId} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+			    and shop_id = #{shopId} 
+			</if>  
+			<if test="tradeMethod != null and tradeMethod != ''">  
+			    and trade_method = #{tradeMethod} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="slogan != null and slogan != ''">  
+			    and slogan = #{slogan} 
+			</if>  
+			<if test="status != null and status != ''">  
+			    and status = #{status} 
+			</if>  
+			<if test="inventoryStatus != null and inventoryStatus != ''">  
+			    and inventory_status = #{inventoryStatus} 
+			</if>  
+			<if test="content != null and content != ''">  
+			    and content = #{content} 
+			</if>  
+			<if test="imgIds != null and imgIds != ''">  
+			    and img_ids = #{imgIds} 
+			</if>  
+			<if test="tagIds != null and tagIds != ''">  
+			    and tag_ids = #{tagIds} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if>  
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="skuType != null and skuType != ''">  
+			    and sku_type = #{skuType} 
+			</if>  
+			<if test="sort != null and sort != ''">  
+			    and sort = #{sort} 
+			</if>  
+			<if test="query != null and query != '' and query.statusSet != null and query.statusSet != ''">  
+			    and status in 
+					<foreach item="statusTmp" collection="query.statusSet" open="(" separator="," close=")">
+		            	#{statusTmp}
+		        	</foreach>
+			</if>
+			<if test="query != null and query != '' and query.searchWordSQL != null and query.searchWordSQL != ''">  
+			    and name like #{query.searchWordSQL} 
+			</if>
+			<if test="query != null and query != '' and query.tagIdLikeSQL != null and query.tagIdLikeSQL != ''">  
+			    and tag_ids like #{query.tagIdLikeSQL} 
+			</if>
+			<if test="query != null and query != '' and query.ids != null and query.ids != ''">  
+			    and 
+			    	id in 
+			    		<foreach item="primary" collection="query.ids" open="(" separator="," close=")">
+							#{primary}
+						</foreach>
+			</if>
+	</select>
+
+</mapper> 

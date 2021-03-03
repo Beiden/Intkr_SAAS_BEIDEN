@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="area">
+
+	<resultMap id="AreaDO" type="com.intkr.saas.domain.dbo.conf.AreaDO"> 
+        <result property="id" column="id"/> 
+        <result property="name" column="name"/> 
+        <result property="pid" column="pid"/> 
+        <result property="sort" column="sort"/> 
+        <result property="note" column="note"/> 
+        <result property="feature" column="feature"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.conf.AreaDO">
+		insert into
+			sys_area(id , name , pid , sort , note , feature , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{name} , #{pid} , #{sort} , #{note} , #{feature} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			sys_area
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			sys_area
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.conf.AreaDO">
+		update 
+			sys_area 
+		set 
+			<if test="name != null and name != ''">  
+			    name = #{name} , 
+			</if> 
+			<if test="pid != null and pid != ''">  
+			    pid = #{pid} , 
+			</if> 
+			<if test="sort != null and sort != ''">  
+			    sort = #{sort} , 
+			</if> 
+			<if test="note != null and note != ''">  
+			    note = #{note} , 
+			</if> 
+			<if test="feature != null and feature != ''">  
+			    feature = #{feature} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="AreaDO">
+		select
+			*
+		from
+			sys_area
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="pid != null and pid != ''">  
+			    and pid = #{pid} 
+			</if>  
+			<if test="sort != null and sort != ''">  
+			    and sort = #{sort} 
+			</if>  
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+		    order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			sys_area
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="pid != null and pid != ''">  
+			    and pid = #{pid} 
+			</if>  
+			<if test="sort != null and sort != ''">  
+			    and sort = #{sort} 
+			</if>  
+	</select>
+
+</mapper> 

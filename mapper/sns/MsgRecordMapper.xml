@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="msgRecord">
+
+	<resultMap id="MsgRecordDO" type="com.intkr.saas.domain.dbo.sns.MsgRecordDO"> 
+        <result property="id" column="id"/> 
+        <result property="content" column="content"/> 
+        <result property="toPhone" column="to_phone"/>
+        <result property="relatedId" column="related_id"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.sns.MsgRecordDO">
+		insert into
+			sns_msg_record(id , content , to_phone , related_id , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{content} , #{toPhone} , #{relatedId} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			sns_msg_record
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			sns_msg_record
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.sns.MsgRecordDO">
+		update 
+			sns_msg_record 
+		set 
+			<if test="content != null and content != ''">  
+			    content = #{content} , 
+			</if>  
+			<if test="toPhone != null and toPhone != ''">  
+			    to_phone = #{toPhone} , 
+			</if>  
+			<if test="relatedId != null and relatedId != ''">  
+			    related_id = #{relatedId} , 
+			</if>  
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="MsgRecordDO">
+		select
+			*
+		from
+			sns_msg_record
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="content != null and content != ''">  
+			    and content = #{content} 
+			</if>  
+			<if test="toPhone != null and toPhone != ''">  
+			    and to_phone = #{toPhone} 
+			</if>  
+			<if test="relatedId != null and relatedId != ''">  
+			    and related_id = #{relatedId} 
+			</if>  
+		order by 
+			id desc
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			sns_msg_record
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="content != null and content != ''">  
+			    and content = #{content} 
+			</if>  
+			<if test="toPhone != null and toPhone != ''">  
+			    and to_phone = #{toPhone} 
+			</if>  
+			<if test="relatedId != null and relatedId != ''">  
+			    and related_id = #{relatedId} 
+			</if>  
+	</select>
+
+</mapper> 

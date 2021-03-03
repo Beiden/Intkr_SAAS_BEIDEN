@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="msg">
+
+	<resultMap id="MsgDO" type="com.intkr.saas.domain.dbo.sns.MsgDO"> 
+        <result property="id" column="id"/> 
+        <result property="saasId" column="saas_id"/> 
+        <result property="channel" column="channel"/> 
+        <result property="type" column="type"/> 
+        <result property="fromUserId" column="from_user_id"/> 
+        <result property="toUserId" column="to_user_id"/> 
+        <result property="toEmail" column="to_email"/> 
+        <result property="toPhone" column="to_phone"/> 
+        <result property="toWeixin" column="to_weixin"/> 
+        <result property="isToUserRead" column="is_to_user_read"/> 
+        <result property="status" column="status"/> 
+        <result property="title" column="title"/> 
+        <result property="content" column="content"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.sns.MsgDO">
+		insert into
+			sns_msg(id , saas_id , channel , type , from_user_id , to_user_id , to_email , to_phone , to_weixin , is_to_user_read , status , title , content , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{channel} , #{type} , #{fromUserId} , #{toUserId} , #{toEmail} , #{toPhone} , #{toWeixin} , #{isToUserRead} , #{status} , #{title} , #{content} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			sns_msg
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			sns_msg
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="readMsgs" parameterType="com.intkr.saas.domain.dbo.sns.ContactDO">
+		update 
+			sns_msg 
+		set 
+		    is_to_user_read = 1 , 
+			gmt_modified = now()
+		where 
+			is_deleted = 0
+			<if test="userId != null and userId != ''">  
+			    and to_user_id = #{userId} 
+			</if>  
+			<if test="contactId != null and contactId != ''">  
+			    and from_user_id = #{contactId} 
+			</if>  
+		and 
+			is_to_user_read = 2 
+		and
+			is_deleted = 0
+	</update>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.sns.MsgDO">
+		update 
+			sns_msg 
+		set 
+			<if test="type != null and type != ''">  
+			    type = #{type} , 
+			</if> 
+			<if test="channel != null and channel != ''">  
+			    channel = #{channel} , 
+			</if> 
+			<if test="fromUserId != null and fromUserId != ''">  
+			    from_user_id = #{fromUserId} , 
+			</if>  
+			<if test="toUserId != null and toUserId != ''">  
+			    to_user_id = #{toUserId} , 
+			</if>  
+			<if test="toPhone != null and toPhone != ''">  
+			    to_phone = #{toPhone} , 
+			</if>  
+			<if test="toEmail != null and toEmail != ''">  
+			    to_email = #{toEmail} , 
+			</if>  
+			<if test="toWeixin != null and toWeixin != ''">  
+			    to_weixin = #{toWeixin} , 
+			</if>  
+			<if test="isToUserRead != null and isToUserRead != ''">  
+			    is_to_user_read = #{isToUserRead} , 
+			</if>  
+			<if test="status != null and status != ''">  
+			    status = #{status} , 
+			</if>  
+			<if test="title != null and title != ''">  
+			    title = #{title} , 
+			</if>  
+			<if test="content != null and content != ''">  
+			    content = #{content} , 
+			</if>  
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="MsgDO">
+		select
+			*
+		from
+			sns_msg
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="channel != null and channel != ''">  
+			    and channel = #{channel} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="fromUserId != null and fromUserId != ''">  
+			    and from_user_id = #{fromUserId} 
+			</if> 
+			<if test="toUserId != null and toUserId != ''">  
+			    and to_user_id = #{toUserId} 
+			</if> 
+			<if test="toPhone != null and toPhone != ''">  
+			    and to_phone = #{toPhone} 
+			</if> 
+			<if test="toEmail != null and toEmail != ''">  
+			    and to_email = #{toEmail} 
+			</if> 
+			<if test="toWeixin != null and toWeixin != ''">  
+			    and to_weixin = #{toWeixin} 
+			</if> 
+			<if test="isToUserRead != null and isToUserRead != ''">  
+			    and is_to_user_read = #{isToUserRead} 
+			</if> 
+			<if test="status != null and status != ''">  
+			    and status = #{status} 
+			</if> 
+			<if test="title != null and title != ''">  
+			    and title = #{title} 
+			</if> 
+			<if test="content != null and content != ''">  
+			    and content = #{content} 
+			</if> 
+			<if test="query != null and query != '' and query.userId != null and query.userId != '' and query.contactId != null and query.contactId != ''">  
+			    and 
+			    	( 
+			    			from_user_id = #{query.userId} 
+			    		and 
+			    			to_user_id = #{query.contactId}
+			    		or 
+			    			from_user_id = #{query.contactId} 
+			    		and 
+			    			to_user_id = #{query.userId}
+			    	)
+			</if> 
+		order by gmt_created desc
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			sns_msg
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="channel != null and channel != ''">  
+			    and channel = #{channel} 
+			</if>  
+			<if test="fromUserId != null and fromUserId != ''">  
+			    and from_user_id = #{fromUserId} 
+			</if> 
+			<if test="toUserId != null and toUserId != ''">  
+			    and to_user_id = #{toUserId} 
+			</if> 
+			<if test="toPhone != null and toPhone != ''">  
+			    and to_phone = #{toPhone} 
+			</if> 
+			<if test="toEmail != null and toEmail != ''">  
+			    and to_email = #{toEmail} 
+			</if> 
+			<if test="toWeixin != null and toWeixin != ''">  
+			    and to_weixin = #{toWeixin} 
+			</if> 
+			<if test="isToUserRead != null and isToUserRead != ''">  
+			    and is_to_user_read = #{isToUserRead} 
+			</if> 
+			<if test="status != null and status != ''">  
+			    and status = #{status} 
+			</if> 
+			<if test="title != null and title != ''">  
+			    and title = #{title} 
+			</if> 
+			<if test="content != null and content != ''">  
+			    and content = #{content} 
+			</if> 
+	</select>
+
+</mapper> 

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="orderTimeLine">
+
+	<resultMap id="OrderTimeLineDO" type="com.intkr.saas.domain.dbo.order.OrderTimeLineDO"> 
+        <result property="id" column="id"/> 
+        <result property="saasId" column="saas_id"/> 
+        <result property="orderId" column="order_id"/> 
+        <result property="userId" column="user_id"/> 
+        <result property="type" column="type"/> 
+        <result property="note" column="note"/> 
+        <result property="time" column="time"/> 
+        <result property="long1" column="long1"/> 
+        <result property="long2" column="long2"/> 
+        <result property="long3" column="long3"/> 
+        <result property="feature" column="feature"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.order.OrderTimeLineDO">
+		insert into
+			order_time_line(id , saas_id , order_id , user_id , type , note , time , long1 , long2 , long3 , feature , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{orderId} , #{userId} , #{type} , #{note} , #{time} , #{long1} , #{long2} , #{long3} , #{feature} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			order_time_line
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			order_time_line
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.order.OrderTimeLineDO">
+		update 
+			order_time_line 
+		set 
+			<if test="saasId != null and saasId != ''">  
+			    saas_id = #{saasId} , 
+			</if> 
+			<if test="orderId != null and orderId != ''">  
+			    order_id = #{orderId} , 
+			</if> 
+			<if test="userId != null and userId != ''">  
+			    user_id = #{userId} , 
+			</if> 
+			<if test="type != null and type != ''">  
+			    type = #{type} , 
+			</if> 
+			<if test="note != null and note != ''">  
+			    note = #{note} , 
+			</if> 
+			<if test="time != null and time != ''">  
+			    time = #{time} , 
+			</if> 
+			<if test="long1 != null and long1 != ''">  
+			    long1 = #{long1} , 
+			</if> 
+			<if test="long2 != null and long2 != ''">  
+			    long2 = #{long2} , 
+			</if> 
+			<if test="long3 != null and long3 != ''">  
+			    long3 = #{long3} , 
+			</if> 
+			<if test="feature != null and feature != ''">  
+			    feature = #{feature} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="OrderTimeLineDO">
+		select
+			*
+		from
+			order_time_line
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="orderId != null and orderId != ''">  
+			    and order_id = #{orderId} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+			    and user_id = #{userId} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="note != null and note != ''">  
+			    and note = #{note} 
+			</if>  
+			<if test="time != null and time != ''">  
+			    and time = #{time} 
+			</if>  
+			<if test="long1 != null and long1 != ''">  
+			    and long1 = #{long1} 
+			</if>  
+			<if test="long2 != null and long2 != ''">  
+			    and long2 = #{long2} 
+			</if>  
+			<if test="long3 != null and long3 != ''">  
+			    and long3 = #{long3} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if>  
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+		    order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			order_time_line
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="orderId != null and orderId != ''">  
+			    and order_id = #{orderId} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+			    and user_id = #{userId} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="note != null and note != ''">  
+			    and note = #{note} 
+			</if>  
+			<if test="time != null and time != ''">  
+			    and time = #{time} 
+			</if>  
+			<if test="long1 != null and long1 != ''">  
+			    and long1 = #{long1} 
+			</if>  
+			<if test="long2 != null and long2 != ''">  
+			    and long2 = #{long2} 
+			</if>  
+			<if test="long3 != null and long3 != ''">  
+			    and long3 = #{long3} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if>  
+	</select>
+
+</mapper> 

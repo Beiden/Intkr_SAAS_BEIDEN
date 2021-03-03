@@ -1,0 +1,26 @@
+package ${Context.clazPackage}dao$!{Context.module}.impl;
+
+import com.intkr.saas.dao.BaseDAOImpl;
+
+import org.springframework.stereotype.Repository;
+
+import ${Context.clazPackage}dao$!{Context.module}.$!{tableDO.getClazName()}DAO;
+import ${Context.clazPackage}domain.dbo$!{Context.module}.$!{tableDO.getClazName()}DO;
+
+/**
+ * $!{tableDO.desc}
+ * 
+ * @table $!{tableDO.name}
+ * 
+ * @author Beiden
+ * @date $!{Context.getTime()}
+ * @version 1.0
+ */
+@Repository("$!{tableDO.getClazName()}DAO")
+public class $!{tableDO.getClazName()}DAOImpl extends BaseDAOImpl<$!{tableDO.getClazName()}DO> implements $!{tableDO.getClazName()}DAO {
+
+	public String getNameSpace() {
+		return "$!{tableDO.proName}";
+	}
+
+}

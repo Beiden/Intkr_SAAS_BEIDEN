@@ -1,0 +1,54 @@
+package ${Context.clazPackage}domain.dbo$!{Context.module};
+
+#if($tableDO.containDate())
+import java.util.Date;
+
+#end
+import com.intkr.saas.domain.BaseDO;
+
+/**
+ * $!{tableDO.desc}
+ * 
+ * @table $!{tableDO.name}
+ * 
+ * @author Beiden
+ * @date $!{Context.getTime()}
+ * @version 1.0
+ */
+public class $!{tableDO.getClazName()}DO extends BaseDO<$!{tableDO.getClazName()}DO> {
+
+	private static final long serialVersionUID = 1L;
+
+#foreach($column in $tableDO.columns)
+#if($!{column.name} == "id"
+	 || $!{column.name} == "gmt_modified"
+	 || $!{column.name} == "gmtModified"
+	 || $!{column.name} == "is_deleted"
+	 || $!{column.name} == "isDeleted"
+	 || $!{column.name} == "ctime"
+	 || $!{column.name} == "mtime"
+	 || $!{column.name} == "gmt_created"
+	 || $!{column.name} == "gmtCreated")#else
+	// $!{column.desc}
+	private $!{column.clazType} $!{column.getProName()};
+
+#end#end
+#foreach($column in $tableDO.columns)#if($!{column.name} == "id"
+										 || $!{column.name} == "gmt_modified"
+										 || $!{column.name} == "gmtModified"
+										 || $!{column.name} == "is_deleted" 
+										 || $!{column.name} == "isDeleted" 
+										 || $!{column.name} == "ctime" 
+										 || $!{column.name} == "mtime" 
+										 || $!{column.name} == "gmt_created" 
+										 || $!{column.name} == "gmtCreated")#else
+	public $!{column.clazType} get$!{column.getClazName()}() {
+		return $!{column.getProName()};
+	}
+
+	public void set$!{column.getClazName()}($!{column.clazType} $!{column.getProName()}) {
+		this.$!{column.getProName()} = $!{column.getProName()};
+	}
+
+#end#end
+}

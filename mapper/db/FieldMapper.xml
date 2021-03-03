@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  -->
+<mapper namespace="db_field">
+
+	<resultMap id="resultMapObj" type="com.intkr.saas.domain.dbo.db.FieldDO"> 
+		<result property="id" column="id"/> 
+		<result property="saasId" column="saas_id"/> 
+		<result property="databaseId" column="database_id"/> 
+		<result property="tableId" column="table_id"/> 
+		<result property="dbName" column="db_name"/> 
+		<result property="name" column="name"/> 
+		<result property="dbType" column="db_type"/> 
+		<result property="type" column="type"/> 
+		<result property="searchType" column="search_type"/> 
+		<result property="showType" column="show_type"/> 
+		<result property="dbLength" column="db_length"/> 
+		<result property="allowNull" column="allow_null"/> 
+		<result property="note" column="note"/> 
+		<result property="links" column="links"/> 
+		<result property="feature" column="feature"/> 
+		<result property="sort" column="sort"/> 
+		<result property="gmtModified" column="gmt_modified"/> 
+		<result property="gmtCreated" column="gmt_created"/> 
+		<result property="isDeleted" column="is_deleted"/> 
+	</resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.db.FieldDO">
+		insert into
+			d_field(id , saas_id , database_id , table_id , db_name , name , db_type , type , search_type , show_type , db_length , allow_null , links , note , feature , sort , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{databaseId} , #{tableId} , #{dbName} , #{name} , #{dbType} , #{type} , #{searchType} , #{showType} , #{dbLength} , #{allowNull} , #{links} , #{note} , #{feature} , #{sort} , now() , now() , 0)
+	</insert>
+
+	<insert id="inserts">
+		insert into
+			d_field(id , saas_id , database_id , table_id , db_name , name , db_type , type , search_type , show_type , db_length , allow_null , note , feature , sort , gmt_modified , gmt_created , is_deleted)
+		values
+			<foreach item="data" collection="datas" open="(" separator="," close=")">
+				#{data.id} , #{saasId} , #{databaseId} , #{tableId} , #{dbName} , #{name} , #{dbType} , #{type} , #{searchType} , #{showType} , #{dbLength} , #{allowNull} , #{note} , #{feature} , #{sort} , now() , now() , 0
+			</foreach>
+	</insert>
+	
+	<delete id="delete">
+		update
+			d_field
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			d_field
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+					#{primary}
+				</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.db.FieldDO">
+		update 
+			d_field 
+		set 
+			<if test="saasId != null">  
+				saas_id = #{saasId} , 
+			</if> 
+			<if test="databaseId != null">  
+				database_id = #{databaseId} , 
+			</if> 
+			<if test="tableId != null">  
+				table_id = #{tableId} , 
+			</if> 
+			<if test="dbName != null">  
+				db_name = #{dbName} , 
+			</if> 
+			<if test="name != null">  
+				name = #{name} , 
+			</if> 
+			<if test="dbType != null">  
+				db_type = #{dbType} , 
+			</if> 
+			<if test="type != null">  
+				type = #{type} , 
+			</if> 
+			<if test="searchType != null">  
+				search_type = #{searchType} , 
+			</if> 
+			<if test="showType != null">  
+				show_type = #{showType} , 
+			</if> 
+			<if test="dbLength != null">  
+				db_length = #{dbLength} , 
+			</if> 
+			<if test="allowNull != null">  
+				allow_null = #{allowNull} , 
+			</if> 
+			<if test="links != null">  
+				links = #{links} , 
+			</if> 
+			<if test="note != null">  
+				note = #{note} , 
+			</if> 
+			<if test="feature != null">  
+				feature = #{feature} , 
+			</if> 
+			<if test="sort != null">  
+				sort = #{sort} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="resultMapObj">
+		select
+			*
+		from
+			d_field
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="databaseId != null and databaseId != ''">  
+				and database_id = #{databaseId} 
+			</if>  
+			<if test="tableId != null and tableId != ''">  
+				and table_id = #{tableId} 
+			</if>  
+			<if test="dbName != null and dbName != ''">  
+				and db_name = #{dbName} 
+			</if>  
+			<if test="name != null and name != ''">  
+				and name = #{name} 
+			</if>  
+			<if test="dbType != null and dbType != ''">  
+				and db_type = #{dbType} 
+			</if>  
+			<if test="type != null and type != ''">  
+				and type = #{type} 
+			</if>  
+			<if test="searchType != null and searchType != ''">  
+				and search_type = #{searchType} 
+			</if>  
+			<if test="dbLength != null and dbLength != ''">  
+				and db_length = #{dbLength} 
+			</if>  
+			<if test="allowNull != null and allowNull != ''">  
+				and allow_null = #{allowNull} 
+			</if>  
+			<if test="links != null and links != ''">  
+				and links = #{links} 
+			</if>  
+			<if test="note != null and note != ''">  
+				and note = #{note} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+			<if test="sort != null and sort != ''">  
+				and sort = #{sort} 
+			</if>  
+			<if test="query != null and query != '' and query.minId != null and query.minId != ''">  
+				and id &gt;= #{query.minId} 
+			</if>  
+			<if test="query != null and query != '' and query.maxId != null and query.maxId != ''">  
+				and id &lt;= #{query.maxId} 
+			</if>  
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+			order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(1)
+		from
+			d_field
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="databaseId != null and databaseId != ''">  
+				and database_id = #{databaseId} 
+			</if>  
+			<if test="tableId != null and tableId != ''">  
+				and table_id = #{tableId} 
+			</if>  
+			<if test="dbName != null and dbName != ''">  
+				and db_name = #{dbName} 
+			</if>  
+			<if test="name != null and name != ''">  
+				and name = #{name} 
+			</if>  
+			<if test="dbType != null and dbType != ''">  
+				and db_type = #{dbType} 
+			</if>  
+			<if test="type != null and type != ''">  
+				and type = #{type} 
+			</if>  
+			<if test="searchType != null and searchType != ''">  
+				and search_type = #{searchType} 
+			</if>  
+			<if test="showType != null and showType != ''">  
+				and show_type = #{showType} 
+			</if>  
+			<if test="dbLength != null and dbLength != ''">  
+				and db_length = #{dbLength} 
+			</if>  
+			<if test="allowNull != null and allowNull != ''">  
+				and allow_null = #{allowNull} 
+			</if>  
+			<if test="note != null and note != ''">  
+				and note = #{note} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+			<if test="sort != null and sort != ''">  
+				and sort = #{sort} 
+			</if>  
+			<if test="query != null and query != '' and query.minId != null and query.minId != ''">  
+				and id &gt;= #{query.minId} 
+			</if>  
+			<if test="query != null and query != '' and query.maxId != null and query.maxId != ''">  
+				and id &lt;= #{query.maxId} 
+			</if>  
+	</select>
+
+</mapper> 

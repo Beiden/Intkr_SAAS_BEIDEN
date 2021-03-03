@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 秒杀活动 -->
+<mapper namespace="itemFlashActivity">
+
+	<resultMap id="resultMapObj" type="com.intkr.saas.domain.dbo.sms.ItemFlashActivityDO"> 
+		<result property="id" column="id"/> 
+		<result property="saasId" column="saas_id"/> 
+		<result property="shopId" column="shop_id"/> 
+		<result property="name" column="name"/> 
+		<result property="type" column="type"/> 
+		<result property="status" column="status"/> 
+		<result property="startTime" column="start_time"/> 
+		<result property="endTime" column="end_time"/> 
+		<result property="sort" column="sort"/> 
+		<result property="feature" column="feature"/> 
+		<result property="gmtModified" column="gmt_modified"/> 
+		<result property="gmtCreated" column="gmt_created"/> 
+		<result property="isDeleted" column="is_deleted"/> 
+	</resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.sms.ItemFlashActivityDO">
+		insert into
+			item_flash_activity(id , saas_id , shop_id , name , type , status , start_time , end_time , sort , feature , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{shopId} , #{name} , #{type} , #{status} , #{startTime} , #{endTime} , #{sort} , #{feature} , now() , now() , 0)
+	</insert>
+
+	<insert id="inserts">
+		insert into
+			item_flash_activity(id , saas_id , name , type , status , start_time , end_time , sort , feature , gmt_modified , gmt_created , is_deleted)
+		values
+			<foreach item="data" collection="datas" open="(" separator="," close=")">
+				#{data.id} , #{saasId} , #{name} , #{type} , #{status} , #{startTime} , #{endTime} , #{sort} , #{feature} , now() , now() , 0
+			</foreach>
+	</insert>
+	
+	<delete id="delete">
+		update
+			item_flash_activity
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+		and
+			is_deleted = 0
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			item_flash_activity
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+					#{primary}
+				</foreach>
+		and
+			is_deleted = 0
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.sms.ItemFlashActivityDO">
+		update 
+			item_flash_activity 
+		set 
+			<if test="saasId != null">  
+				saas_id = #{saasId} , 
+			</if> 
+			<if test="shopId != null">  
+				shop_id = #{shopId} , 
+			</if> 
+			<if test="name != null">  
+				name = #{name} , 
+			</if> 
+			<if test="type != null">  
+				type = #{type} , 
+			</if> 
+			<if test="status != null">  
+				status = #{status} , 
+			</if> 
+			<if test="startTime != null">  
+				start_time = #{startTime} , 
+			</if> 
+			<if test="endTime != null">  
+				end_time = #{endTime} , 
+			</if> 
+			<if test="sort != null">  
+				sort = #{sort} , 
+			</if> 
+			<if test="feature != null">  
+				feature = #{feature} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="resultMapObj">
+		select
+			*
+		from
+			item_flash_activity
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+				and shop_id = #{shopId} 
+			</if>  
+			<if test="name != null and name != ''">  
+				and name = #{name} 
+			</if>  
+			<if test="type != null and type != ''">  
+				and type = #{type} 
+			</if>  
+			<if test="status != null and status != ''">  
+				and status = #{status} 
+			</if>  
+			<if test="startTime != null and startTime != ''">  
+				and start_time = #{startTime} 
+			</if>  
+			<if test="endTime != null and endTime != ''">  
+				and end_time = #{endTime} 
+			</if>  
+			<if test="sort != null and sort != ''">  
+				and sort = #{sort} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+			<if test="query != null and query != '' and query.minId != null and query.minId != ''">  
+				and id &gt;= #{query.minId} 
+			</if>  
+			<if test="query != null and query != '' and query.maxId != null and query.maxId != ''">  
+				and id &lt;= #{query.maxId} 
+			</if>  
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+			order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(1)
+		from
+			item_flash_activity
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+				and shop_id = #{shopId} 
+			</if>  
+			<if test="name != null and name != ''">  
+				and name = #{name} 
+			</if>  
+			<if test="type != null and type != ''">  
+				and type = #{type} 
+			</if>  
+			<if test="status != null and status != ''">  
+				and status = #{status} 
+			</if>  
+			<if test="startTime != null and startTime != ''">  
+				and start_time = #{startTime} 
+			</if>  
+			<if test="endTime != null and endTime != ''">  
+				and end_time = #{endTime} 
+			</if>  
+			<if test="sort != null and sort != ''">  
+				and sort = #{sort} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+			<if test="query != null and query != '' and query.minId != null and query.minId != ''">  
+				and id &gt;= #{query.minId} 
+			</if>  
+			<if test="query != null and query != '' and query.maxId != null and query.maxId != ''">  
+				and id &lt;= #{query.maxId} 
+			</if>  
+	</select>
+
+</mapper> 

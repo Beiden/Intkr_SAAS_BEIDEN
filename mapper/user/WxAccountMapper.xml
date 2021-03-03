@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="wxAccount">
+
+	<resultMap id="WxAccountDO" type="com.intkr.saas.domain.dbo.user.WxAccountDO"> 
+        <result property="id" column="id"/> 
+        <result property="saasId" column="saas_id"/> 
+        <result property="userId" column="user_id"/> 
+        <result property="nickName" column="nick_name"/> 
+        <result property="headImgUrl" column="head_img_url"/> 
+        <result property="openId" column="open_id"/> 
+        <result property="sexId" column="sex_id"/> 
+        <result property="sex" column="sex"/> 
+        <result property="city" column="city"/> 
+        <result property="province" column="province"/> 
+        <result property="country" column="country"/> 
+        <result property="unionId" column="union_id"/> 
+        <result property="remark" column="remark"/> 
+        <result property="groupId" column="group_id"/> 
+        <result property="subscribe" column="subscribe"/> 
+        <result property="subscribeTime" column="subscribe_time"/> 
+        <result property="language" column="language"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.user.WxAccountDO">
+		insert into
+			u_weixin_account( id , saas_id , user_id , nick_name , head_img_url , open_id , sex_id , sex , city , province , country , union_id , remark , group_id , subscribe , subscribe_time , language , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{userId} , #{nickName} , #{headImgUrl} , #{openId} , #{sexId} , #{sex} , #{city} , #{province} , #{country} , #{unionId} , #{remark} , #{groupId} , #{subscribe} , #{subscribeTime} , #{language} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			u_weixin_account
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			u_weixin_account
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.user.WxAccountDO">
+		update 
+			u_weixin_account 
+		set 
+			<if test="saasId != null">  
+			    saas_id = #{saasId} , 
+			</if> 
+			<if test="userId != null">  
+			    user_id = #{userId} , 
+			</if> 
+			<if test="nickName != null">  
+			    nick_name = #{nickName} , 
+			</if> 
+			<if test="headImgUrl != null">  
+			    head_img_url = #{headImgUrl} , 
+			</if> 
+			<if test="openId != null">  
+			    open_id = #{openId} , 
+			</if> 
+			<if test="sexId != null">  
+			    sex_id = #{sexId} , 
+			</if> 
+			<if test="sex != null">  
+			    sex = #{sex} , 
+			</if> 
+			<if test="city != null">  
+			    city = #{city} , 
+			</if> 
+			<if test="province != null">  
+			    province = #{province} , 
+			</if> 
+			<if test="country != null">  
+			    country = #{country} , 
+			</if> 
+			<if test="unionId != null">  
+			    union_id = #{unionId} , 
+			</if> 
+			<if test="remark != null">  
+			    remark = #{remark} , 
+			</if> 
+			<if test="groupId != null">  
+			    group_id = #{groupId} , 
+			</if> 
+			<if test="subscribe != null">  
+			    subscribe = #{subscribe} , 
+			</if> 
+			<if test="subscribeTime != null">  
+			    subscribe_time = #{subscribeTime} , 
+			</if> 
+			<if test="language != null">  
+			    language = #{language} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="WxAccountDO">
+		select
+			*
+		from
+			u_weixin_account
+		where 
+			is_deleted = 0
+			<if test="id != null">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="userId != null">  
+			    and user_id = #{userId} 
+			</if>  
+			<if test="nickName != null">  
+			    and nick_name = #{nickName} 
+			</if>  
+			<if test="headImgUrl != null">  
+			    and head_img_url = #{headImgUrl} 
+			</if>  
+			<if test="openId != null">  
+			    and open_id = #{openId} 
+			</if>  
+			<if test="sexId != null">  
+			    and sex_id = #{sexId} 
+			</if>  
+			<if test="sex != null">  
+			    and sex = #{sex} 
+			</if>  
+			<if test="city != null">  
+			    and city = #{city} 
+			</if>  
+			<if test="province != null">  
+			    and province = #{province} 
+			</if>  
+			<if test="country != null">  
+			    and country = #{country} 
+			</if>  
+			<if test="unionId != null">  
+			    and union_id = #{unionId} 
+			</if>  
+			<if test="remark != null">  
+			    and remark = #{remark} 
+			</if>  
+			<if test="groupId != null">  
+			    and group_id = #{groupId} 
+			</if>  
+			<if test="subscribe != null">  
+			    and subscribe = #{subscribe} 
+			</if>  
+			<if test="subscribeTime != null">  
+			    and subscribe_time = #{subscribeTime} 
+			</if>  
+			<if test="language != null">  
+			    and language = #{language} 
+			</if>  
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+		    order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			u_weixin_account
+		where
+			is_deleted = 0
+			<if test="id != null">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="userId != null">  
+			    and user_id = #{userId} 
+			</if>  
+			<if test="nickName != null">  
+			    and nick_name = #{nickName} 
+			</if>  
+			<if test="headImgUrl != null">  
+			    and head_img_url = #{headImgUrl} 
+			</if>  
+			<if test="openId != null">  
+			    and open_id = #{openId} 
+			</if>  
+			<if test="sexId != null">  
+			    and sex_id = #{sexId} 
+			</if>  
+			<if test="sex != null">  
+			    and sex = #{sex} 
+			</if>  
+			<if test="city != null">  
+			    and city = #{city} 
+			</if>  
+			<if test="province != null">  
+			    and province = #{province} 
+			</if>  
+			<if test="country != null">  
+			    and country = #{country} 
+			</if>  
+			<if test="unionId != null">  
+			    and union_id = #{unionId} 
+			</if>  
+			<if test="remark != null">  
+			    and remark = #{remark} 
+			</if>  
+			<if test="groupId != null">  
+			    and group_id = #{groupId} 
+			</if>  
+			<if test="subscribe != null">  
+			    and subscribe = #{subscribe} 
+			</if>  
+			<if test="subscribeTime != null">  
+			    and subscribe_time = #{subscribeTime} 
+			</if>  
+			<if test="language != null">  
+			    and language = #{language} 
+			</if>  
+	</select>
+
+</mapper> 

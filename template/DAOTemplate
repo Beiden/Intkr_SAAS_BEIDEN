@@ -1,0 +1,18 @@
+package ${Context.clazPackage}dao$!{Context.module};
+
+import com.intkr.saas.dao.BaseDAO;
+
+import ${Context.clazPackage}domain.dbo$!{Context.module}.$!{tableDO.getClazName()}DO;
+
+/**
+ * $!{tableDO.desc}
+ * 
+ * @table $!{tableDO.name}
+ * 
+ * @author Beiden
+ * @date $!{Context.getTime()}
+ * @version 1.0
+ */
+public interface $!{tableDO.getClazName()}DAO extends BaseDAO<$!{tableDO.getClazName()}DO> {
+
+}

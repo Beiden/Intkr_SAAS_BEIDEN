@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="saasConfig">
+
+	<resultMap id="resultMapObj" type="com.intkr.saas.domain.dbo.saas.SaasConfigDO"> 
+		<result property="id" column="id"/> 
+		<result property="saasId" column="saas_id"/> 
+		<result property="themeId" column="theme_id"/> 
+		<result property="themeName" column="theme_name"/> 
+		<result property="note" column="note"/> 
+		<result property="feature" column="feature"/> 
+		<result property="gmtModified" column="gmt_modified"/> 
+		<result property="gmtCreated" column="gmt_created"/> 
+		<result property="isDeleted" column="is_deleted"/> 
+	</resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.saas.SaasConfigDO">
+		insert into
+			saas_config(id , saas_id , theme_id , theme_name , note , feature , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{themeId} ,#{themeName} , #{note} , #{feature} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			saas_config
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			saas_config
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+					#{primary}
+				</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.saas.SaasConfigDO">
+		update 
+			saas_config 
+		set 
+			<if test="saasId != null">  
+				saas_id = #{saasId} , 
+			</if> 
+			<if test="themeId != null">  
+				theme_id = #{themeId} , 
+			</if> 
+			<if test="themeName != null">  
+				theme_name = #{themeName} , 
+			</if> 
+			<if test="note != null">  
+				note = #{note} , 
+			</if> 
+			<if test="feature != null">  
+				feature = #{feature} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="resultMapObj">
+		select
+			*
+		from
+			saas_config
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="themeId != null and themeId != ''">  
+				and theme_id = #{themeId} 
+			</if>  
+			<if test="themeName != null and themeName != ''">  
+				and theme_name = #{themeName} 
+			</if>  
+			<if test="note != null and note != ''">  
+				and note = #{note} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+			order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			saas_config
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="themeId != null and themeId != ''">  
+				and theme_id = #{themeId} 
+			</if>  
+			<if test="themeName != null and themeName != ''">  
+				and theme_name = #{themeName} 
+			</if>  
+			<if test="note != null and note != ''">  
+				and note = #{note} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+	</select>
+
+</mapper> 

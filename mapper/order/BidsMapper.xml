@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bids">
+
+	<resultMap id="BidsDO" type="com.intkr.kww.domain.dbo.BidsDO"> 
+        <result property="id" column="id"/> 
+        <result property="relatedId" column="related_id"/> 
+        <result property="userId" column="user_id"/> 
+        <result property="type" column="type"/> 
+        <result property="name" column="name"/> 
+        <result property="expectPrice" column="expect_price"/> 
+        <result property="status" column="status"/> 
+        <result property="imgIds" column="img_ids"/> 
+        <result property="content" column="content"/> 
+        <result property="viewCount" column="view_count"/> 
+        <result property="attentionCount" column="attention_count"/> 
+        <result property="feature" column="feature"/> 
+        <result property="inProcessStartTime" column="in_process_start_time"/> 
+        <result property="inProcessEndTime" column="in_process_end_time"/> 
+        <result property="preHeatStartTime" column="pre_heat_start_time"/> 
+        <result property="preHeatEndTime" column="pre_heat_end_time"/> 
+        <result property="resultId" column="result_id"/> 
+        <result property="resultTime" column="result_time"/> 
+        <result property="str1" column="str1"/> 
+        <result property="str2" column="str2"/> 
+        <result property="str3" column="str3"/> 
+        <result property="str4" column="str4"/> 
+        <result property="str5" column="str5"/> 
+        <result property="str6" column="str6"/> 
+        <result property="str7" column="str7"/> 
+        <result property="str8" column="str8"/> 
+        <result property="str9" column="str9"/> 
+        <result property="text1" column="text1"/> 
+        <result property="text2" column="text2"/> 
+        <result property="text3" column="text3"/> 
+        <result property="dou1" column="dou1"/> 
+        <result property="dou2" column="dou2"/> 
+        <result property="dou3" column="dou3"/> 
+        <result property="integer1" column="integer1"/> 
+        <result property="integer2" column="integer2"/> 
+        <result property="integer3" column="integer3"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.kww.domain.dbo.BidsDO">
+		insert into
+            ik_bids
+			(id , related_id , name , type , expect_price , user_id , status , img_ids , content , feature , view_count , attention_count , in_process_start_time , in_process_end_time , pre_heat_start_time , pre_heat_end_time , result_id , result_time , str1 , str2 , str3 , str4 , str5 , str6 , str7 , str8 , str9 , text1 , text2 , text3 , dou1 , dou2 , dou3 , integer1 , integer2 , integer3 , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{relatedId} , #{name} , #{type} , #{expectPrice} , #{userId} , #{status} , #{imgIds} , #{content} , #{feature} , #{viewCount} , #{attentionCount} , #{inProcessStartTime} , #{inProcessEndTime} , #{preHeatStartTime} , #{preHeatEndTime} , #{resultId} , #{resultTime} , #{str1} , #{str2} , #{str3} , #{str4} , #{str5} , #{str6} , #{str7} , #{str8} , #{str9} , #{text1} , #{text2} , #{text3} , #{dou1} , #{dou2} , #{dou3} , #{integer1} , #{integer2} , #{integer3} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+            ik_bids
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+            ik_bids
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.kww.domain.dbo.BidsDO">
+		update 
+            ik_bids
+		set 
+			<if test="relatedId != null and relatedId != ''">  
+			    related_id = #{relatedId} , 
+			</if> 
+			<if test="type != null and type != ''">  
+			    type = #{type} , 
+			</if> 
+			<if test="userId != null and userId != ''">  
+			    user_id = #{userId} , 
+			</if> 
+			<if test="name != null and name != ''">  
+			    name = #{name} , 
+			</if> 
+			<if test="expectPrice != null and expectPrice != ''">  
+			    expect_price = #{expectPrice} , 
+			</if> 
+			<if test="status != null and status != ''">  
+			    status = #{status} , 
+			</if> 
+			<if test="imgIds != null and imgIds != ''">  
+			    img_ids = #{imgIds} , 
+			</if> 
+			<if test="content != null and content != ''">  
+			    content = #{content} , 
+			</if> 
+			<if test="feature != null and feature != ''">  
+			    feature = #{feature} , 
+			</if> 
+			<if test="viewCount != null and viewCount != ''">  
+			    view_count = #{viewCount} , 
+			</if> 
+			<if test="attentionCount != null and attentionCount != ''">  
+			    attention_count = #{attentionCount} , 
+			</if> 
+			<if test="inProcessStartTime != null and inProcessStartTime != ''">  
+			    in_process_start_time = #{inProcessStartTime} , 
+			</if> 
+			<if test="inProcessEndTime != null and inProcessEndTime != ''">  
+			    in_process_end_time = #{inProcessEndTime} , 
+			</if> 
+			<if test="preHeatStartTime != null and preHeatStartTime != ''">  
+			    pre_heat_start_time = #{preHeatStartTime} , 
+			</if> 
+			<if test="preHeatEndTime != null and preHeatEndTime != ''">  
+			    pre_heat_end_time = #{preHeatEndTime} , 
+			</if> 
+			<if test="resultId != null and resultId != ''">  
+			    result_id = #{resultId} , 
+			</if> 
+			<if test="resultTime != null and resultTime != ''">  
+			    result_time = #{resultTime} , 
+			</if> 
+			<if test="str1 != null and str1 != ''">  
+			    str1 = #{str1} , 
+			</if> 
+			<if test="str2 != null and str2 != ''">  
+			    str2 = #{str2} , 
+			</if> 
+			<if test="str3 != null and str3 != ''">  
+			    str3 = #{str3} , 
+			</if> 
+			<if test="str4 != null and str4 != ''">  
+			    str4 = #{str4} , 
+			</if> 
+			<if test="str5 != null and str5 != ''">  
+			    str5 = #{str5} , 
+			</if> 
+			<if test="str6 != null and str6 != ''">  
+			    str6 = #{str6} , 
+			</if> 
+			<if test="str7 != null and str7 != ''">  
+			    str7 = #{str7} , 
+			</if> 
+			<if test="str8 != null and str8 != ''">  
+			    str8 = #{str8} , 
+			</if> 
+			<if test="str9 != null and str9 != ''">  
+			    str9 = #{str9} , 
+			</if> 
+			<if test="text1 != null and text1 != ''">  
+			    text1 = #{text1} , 
+			</if> 
+			<if test="text2 != null and text2 != ''">  
+			    text2 = #{text2} , 
+			</if> 
+			<if test="text3 != null and text3 != ''">  
+			    text3 = #{text3} , 
+			</if> 
+			<if test="dou1 != null and dou1 != ''">  
+			    dou1 = #{dou1} , 
+			</if> 
+			<if test="dou2 != null and dou2 != ''">  
+			    dou2 = #{dou2} , 
+			</if> 
+			<if test="dou3 != null and dou3 != ''">  
+			    dou3 = #{dou3} , 
+			</if> 
+			<if test="integer1 != null and integer1 != ''">  
+			    integer1 = #{integer1} , 
+			</if> 
+			<if test="integer2 != null and integer2 != ''">  
+			    integer2 = #{integer2} , 
+			</if> 
+			<if test="integer3 != null and integer3 != ''">  
+			    integer3 = #{integer3} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="BidsDO">
+		select
+			*
+		from
+            ik_bids
+		where 
+			is_deleted = 0
+			<if test="relatedId != null and relatedId != ''">  
+			    and related_id = #{relatedId} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+			    and user_id = #{userId} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="status != null and status != ''">  
+			    and status = #{status} 
+			</if>  
+			<if test="imgIds != null and imgIds != ''">  
+			    and img_ids = #{imgIds} 
+			</if>  
+			<if test="content != null and content != ''">  
+			    and content = #{content} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if>  
+			<if test="viewCount != null and viewCount != ''">  
+			    and view_count = #{viewCount} 
+			</if>  
+			<if test="attentionCount != null and attentionCount != ''">  
+			    and attention_count = #{attentionCount} 
+			</if>  
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="inProcessStartTime != null and inProcessStartTime != ''">  
+			    and in_process_start_time = #{inProcessStartTime} 
+			</if>  
+			<if test="inProcessEndTime != null and inProcessEndTime != ''">  
+			    and in_process_end_time = #{inProcessEndTime} 
+			</if>  
+			<if test="preHeatStartTime != null and preHeatStartTime != ''">  
+			    and pre_heat_start_time = #{preHeatStartTime} 
+			</if>  
+			<if test="preHeatEndTime != null and preHeatEndTime != ''">  
+			    and pre_heat_end_time = #{preHeatEndTime} 
+			</if>  
+			<if test="resultId != null and resultId != ''">  
+			    and result_id = #{resultId} 
+			</if>  
+			<if test="resultTime != null and resultTime != ''">  
+			    and result_time = #{resultTime} 
+			</if>  
+			<if test="str1 != null and str1 != ''">  
+			    and str1 = #{str1} 
+			</if>  
+			<if test="str2 != null and str2 != ''">  
+			    and str2 = #{str2} 
+			</if>  
+			<if test="str3 != null and str3 != ''">  
+			    and str3 = #{str3} 
+			</if>  
+			<if test="str4 != null and str4 != ''">  
+			    and str4 = #{str4} 
+			</if>  
+			<if test="str5 != null and str5 != ''">  
+			    and str5 = #{str5} 
+			</if>  
+			<if test="str6 != null and str6 != ''">  
+			    and str6 = #{str6} 
+			</if>  
+			<if test="str7 != null and str7 != ''">  
+			    and str7 = #{str7} 
+			</if>  
+			<if test="str8 != null and str81 != ''">  
+			    and str8 = #{str8} 
+			</if>  
+			<if test="str9 != null and str9 != ''">  
+			    and str9 = #{str9} 
+			</if>  
+			<if test="text1 != null and text1 != ''">  
+			    and text1 = #{text1} 
+			</if>  
+			<if test="text2 != null and text2 != ''">  
+			    and text2 = #{text2} 
+			</if>  
+			<if test="text3 != null and text3 != ''">  
+			    and text3 = #{text3} 
+			</if>  
+			<if test="dou1 != null and dou1 != ''">  
+			    and dou1 = #{dou1} 
+			</if>  
+			<if test="dou2 != null and dou2 != ''">  
+			    and dou2 = #{dou2} 
+			</if>  
+			<if test="dou3 != null and dou3 != ''">  
+			    and dou3 = #{dou3} 
+			</if>  
+			<if test="integer1 != null and integer1 != ''">  
+			    and integer1 = #{integer1} 
+			</if>  
+			<if test="integer2 != null and integer2 != ''">  
+			    and integer2 = #{integer2} 
+			</if>  
+			<if test="integer3 != null and integer3 != ''">  
+			    and integer3 = #{integer3} 
+			</if>  
+			<if test="query != null and query != '' and query.statusSet != null and query.statusSet != ''">  
+			    and status in 
+					<foreach item="statusTmp" collection="query.statusSet" open="(" separator="," close=")">
+		            	#{statusTmp}
+		        	</foreach>
+			</if>
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+		    order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+            ik_bids
+		where
+			is_deleted = 0
+			<if test="relatedId != null and relatedId != ''">  
+			    and related_id = #{relatedId} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+			    and user_id = #{userId} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="status != null and status != ''">  
+			    and status = #{status} 
+			</if>  
+			<if test="content != null and content != ''">  
+			    and content = #{content} 
+			</if>  
+			<if test="imgIds != null and imgIds != ''">  
+			    and img_ids = #{imgIds} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if>  
+			<if test="viewCount != null and viewCount != ''">  
+			    and view_count = #{viewCount} 
+			</if>  
+			<if test="attentionCount != null and attentionCount != ''">  
+			    and attention_count = #{attentionCount} 
+			</if>  
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="inProcessStartTime != null and inProcessStartTime != ''">  
+			    and in_process_start_time = #{inProcessStartTime} 
+			</if>  
+			<if test="inProcessEndTime != null and inProcessEndTime != ''">  
+			    and in_process_end_time = #{inProcessEndTime} 
+			</if>  
+			<if test="preHeatStartTime != null and preHeatStartTime != ''">  
+			    and pre_heat_start_time = #{preHeatStartTime} 
+			</if>  
+			<if test="preHeatEndTime != null and preHeatEndTime != ''">  
+			    and pre_heat_end_time = #{preHeatEndTime} 
+			</if>  
+			<if test="resultId != null and resultId != ''">  
+			    and result_id = #{resultId} 
+			</if>  
+			<if test="resultTime != null and resultTime != ''">  
+			    and result_time = #{resultTime} 
+			</if>  
+			<if test="str1 != null and str1 != ''">  
+			    and str1 = #{str1} 
+			</if>  
+			<if test="str2 != null and str2 != ''">  
+			    and str2 = #{str2} 
+			</if>  
+			<if test="str3 != null and str3 != ''">  
+			    and str3 = #{str3} 
+			</if>  
+			<if test="str4 != null and str4 != ''">  
+			    and str4 = #{str4} 
+			</if>  
+			<if test="str5 != null and str5 != ''">  
+			    and str5 = #{str5} 
+			</if>  
+			<if test="str6 != null and str6 != ''">  
+			    and str6 = #{str6} 
+			</if>  
+			<if test="str7 != null and str7 != ''">  
+			    and str7 = #{str7} 
+			</if>  
+			<if test="str8 != null and str81 != ''">  
+			    and str8 = #{str8} 
+			</if>  
+			<if test="str9 != null and str9 != ''">  
+			    and str9 = #{str9} 
+			</if>  
+			<if test="text1 != null and text1 != ''">  
+			    and text1 = #{text1} 
+			</if>  
+			<if test="text2 != null and text2 != ''">  
+			    and text2 = #{text2} 
+			</if>  
+			<if test="text3 != null and text3 != ''">  
+			    and text3 = #{text3} 
+			</if>  
+			<if test="dou1 != null and dou1 != ''">  
+			    and dou1 = #{dou1} 
+			</if>  
+			<if test="dou2 != null and dou2 != ''">  
+			    and dou2 = #{dou2} 
+			</if>  
+			<if test="dou3 != null and dou3 != ''">  
+			    and dou3 = #{dou3} 
+			</if>  
+			<if test="integer1 != null and integer1 != ''">  
+			    and integer1 = #{integer1} 
+			</if>  
+			<if test="integer2 != null and integer2 != ''">  
+			    and integer2 = #{integer2} 
+			</if>  
+			<if test="integer3 != null and integer3 != ''">  
+			    and integer3 = #{integer3} 
+			</if>  
+			<if test="query != null and query != '' and query.statusSet != null and query.statusSet != ''">  
+			    and status in 
+					<foreach item="statusTmp" collection="query.statusSet" open="(" separator="," close=")">
+		            	#{statusTmp}
+		        	</foreach>
+			</if>
+	</select>
+
+</mapper> 

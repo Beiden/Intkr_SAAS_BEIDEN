@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="frontMenuDetail">
+
+	<resultMap id="CmsFrontMenuDetailDO" type="com.intkr.saas.domain.dbo.menu.FrontMenuDetailDO"> 
+        <result property="id" column="id"/> 
+        <result property="saasId" column="saas_id"/> 
+        <result property="frontMenuId" column="front_menu_id"/> 
+        <result property="level" column="level"/> 
+        <result property="pid" column="pid"/> 
+        <result property="type" column="type"/> 
+        <result property="name" column="name"/> 
+        <result property="url" column="url"/> 
+        <result property="title" column="title"/> 
+        <result property="relatedId" column="related_id"/> 
+        <result property="sort" column="sort"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.menu.FrontMenuDetailDO">
+		insert into
+			cms_front_menu_detail(id , saas_id ,front_menu_id , level , pid , type , name , title , related_id , url , sort , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{frontMenuId} , #{level} , #{pid} , #{type} , #{name} , #{title} , #{relatedId} , #{url} , #{sort} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			cms_front_menu_detail
+		set
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			cms_front_menu_detail
+		set
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.menu.FrontMenuDetailDO">
+		update 
+			cms_front_menu_detail 
+		set 
+			<if test="frontMenuId != null and frontMenuId != ''">  
+			    front_menu_id = #{frontMenuId} , 
+			</if>  
+			<if test="level != null and level != ''">  
+			    level = #{level} , 
+			</if>  
+			<if test="pid != null and pid != ''">  
+			    pid = #{pid} , 
+			</if>  
+			<if test="type != null and type != ''">  
+			    type = #{type} , 
+			</if>  
+			<if test="name != null and name != ''">  
+			    name = #{name} , 
+			</if>  
+			<if test="title != null and title != ''">  
+			    title = #{title} , 
+			</if>  
+			<if test="relatedId != null and relatedId != ''">  
+			    related_id = #{relatedId} , 
+			</if>  
+			<if test="url != null and url != ''">  
+			    url = #{url}   ,
+			</if>  
+			<if test="sort != null and sort != ''">  
+			    sort = #{sort}  ,
+			</if>  
+			gmt_modified = now()
+		where id = #{id}
+	</update>
+	
+	<select id="select" resultMap="CmsFrontMenuDetailDO">
+		select
+			*
+		from
+			cms_front_menu_detail
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if> 
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="frontMenuId != null and frontMenuId != ''">  
+			    and front_menu_id = #{frontMenuId} 
+			</if>  
+			<if test="level != null and level != ''">  
+			    and level = #{level} 
+			</if>  
+			<if test="pid != null and pid != ''">  
+			    and pid = #{pid} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="title != null and title != ''">  
+			    and title = #{title} 
+			</if>  
+			<if test="relatedId != null and relatedId != ''">  
+			    and related_id = #{relatedId} 
+			</if>  
+			<if test="url != null and url != ''">  
+			    and url = #{url} 
+			</if>  
+			<if test="sort != null and sort != ''">  
+			    and sort = #{sort} 
+			</if>  
+		order by sort asc
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			cms_front_menu_detail
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if> 
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="frontMenuId != null and frontMenuId != ''">  
+			    and front_menu_id = #{frontMenuId} 
+			</if>  
+			<if test="level != null and level != ''">  
+			    and level = #{level} 
+			</if>  
+			<if test="pid != null and pid != ''">  
+			    and pid = #{pid} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="title != null and title != ''">  
+			    and title = #{title} 
+			</if>  
+			<if test="relatedId != null and relatedId != ''">  
+			    and related_id = #{relatedId} 
+			</if>  
+			<if test="url != null and url != ''">  
+			    and url = #{url} 
+			</if>  
+			<if test="sort != null and sort != ''">  
+			    and sort = #{sort} 
+			</if>  
+	</select>
+
+</mapper> 

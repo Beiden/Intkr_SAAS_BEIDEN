@@ -1,0 +1,226 @@
+package ${Context.clazPackage}dao$!{Context.module}.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import io.searchbox.client.JestResult;
+import io.searchbox.core.Bulk;
+import io.searchbox.core.Delete;
+import io.searchbox.core.Index;
+import io.searchbox.core.Search;
+import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
+import com.intkr.saas.c.conf.client.IdEngine;
+import com.intkr.saas.dao.EsIndexJestBase;
+import ${Context.clazPackage}dao$!{Context.module}.$!{tableDO.getClazName()}DAO;
+import ${Context.clazPackage}domain.dbo$!{Context.module}.$!{tableDO.getClazName()}DO;
+import com.intkr.saas.util.RequestUtil;
+
+/**
+ * $!{tableDO.desc}
+ * 
+ * @table $!{tableDO.name}
+ * 
+ * @author Beiden
+ * @date $!{Context.getTime()}
+ * @version 1.0
+ */
+@Repository("$!{tableDO.getClazName()}DAO")
+public class $!{tableDO.getClazName()}DAOImpl extends EsIndexJestBase<$!{tableDO.getClazName()}DO> implements $!{tableDO.getClazName()}DAO {
+
+	public $!{tableDO.getClazName()}DAOImpl() {
+		this.urls = "$!{Context.esUrls}";
+		this.index = "$!{Context.esIndex}";
+		this.type = "$!{Context.esType}";
+	}
+
+	public Map<String, Object> doToMap($!{tableDO.getClazName()}DO dto) {
+		Map<String, Object> map = super.doToMap(dto);
+#foreach($column in $tableDO.columns)
+#if($!{column.name} == "gmt_modified" || $!{column.name} == "gmt_created" || $!{column.name} == "gmtModified" || $!{column.name} == "gmtCreated")
+		
+#elseif($!{column.name} == "isDeleted")
+		map.put("isDeleted", dto.getIsDeleted());
+#else
+		if (dto.get$!{column.clazName}() != null) {
+			map.put("$!{column.proName}", dto.get$!{column.clazName}());
+		}
+#end
+#end
+		return map;
+	}
+
+	public $!{tableDO.getClazName()}DO mapToDO(Map<String, Object> map) {
+		$!{tableDO.getClazName()}DO account = new $!{tableDO.getClazName()}DO();
+#foreach($column in $tableDO.columns)
+#if($!{column.name} == "gmt_modified" || $!{column.name} == "gmt_created" || $!{column.name} == "gmtModified" || $!{column.name} == "gmtCreated")
+
+#elseif($!{column.name} == "isDeleted")
+		account.setIsDeleted(((Number) map.get("isDeleted")).intValue());
+#else
+		if (map.get("$!{column.proName}") != null) {
+			account.set$!{column.clazName}(RequestUtil.getParam(map, "$!{column.proName}", $!{column.clazType}.class));
+		}
+#end
+#end
+		return account;
+	}
+
+	public $!{tableDO.getClazName()}DO search($!{tableDO.getClazName()}DO query) {
+		try {
+			SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+			QueryBuilder boolQueryBuilder = getQuery(query);
+			if (boolQueryBuilder != null) {
+				searchSourceBuilder.query(boolQueryBuilder);
+			}
+			fillSort(query, searchSourceBuilder);
+			String queryString = searchSourceBuilder.toString();
+			logger.warn("queryString" + queryString);
+			Search.Builder searchBuilder = new Search.Builder(queryString);
+			if (pwdKey != null) {
+				searchBuilder.setHeader(pwdKey, getSecret());
+			}
+			searchBuilder.setParameter("from", query.get_offset());
+			searchBuilder.setParameter("size", query.get_pageSize());
+			searchBuilder.addIndex(index);
+			searchBuilder.addType(type);
+			Search search = searchBuilder.build();
+			SearchResult result = getClient().execute(search);
+			List<Map> dataList = result.getSourceAsObjectList(Map.class);
+
+			query.set_count(result.getTotal());
+			query.setDatas(new ArrayList<$!{tableDO.getClazName()}DO>());
+			List<$!{tableDO.getClazName()}DO> list = query.getDatas();
+
+			for (Map data : dataList) {
+				try {
+					$!{tableDO.getClazName()}DO order = mapToDO(data);
+					if (order != null) {
+						list.add(order);
+					}
+				} catch (Exception e) {
+					logger.error("", e);
+				}
+			}
+
+			if (query.getQuery("ids") != null) { // 按查询的qids排序
+				List<Long> qids = (List<Long>) query.getQuery("ids");
+				List<$!{tableDO.getClazName()}DO> newList = new ArrayList<$!{tableDO.getClazName()}DO>();
+				for (Long id : qids) {
+					$!{tableDO.getClazName()}DO order = getData(list, id);
+					if (order != null) {
+						newList.add(order);
+					}
+				}
+				list = newList;
+				query.setDatas(newList);
+			}
+
+			if (list != null && !list.isEmpty()) {
+				list.get(0).setProperty("_count", query.get_Count());
+			}
+
+			return query;
+		} catch (Exception e) {
+			logger.error("", e);
+			throw new RuntimeException(e);
+		}
+	}
+
+	public long insert($!{tableDO.getClazName()}DO dto) {
+		return super.insert(dto);
+	}
+
+	public long getId() {
+		return IdEngine.get(this.type);
+	}
+
+	public int delete(Object id) {
+		if (id instanceof Number) {
+			return super.delete(((Number) id).longValue());
+		} else if (id instanceof String) {
+			return super.delete(Long.valueOf(((String) id)));
+		}
+		return 0;
+	}
+
+	public void deleteAll() {
+		throw new RuntimeException();
+	}
+
+	public int deleteAll(List<Object> ids) {
+		return super.delete(ids);
+	}
+
+	public int update($!{tableDO.getClazName()}DO dto) {
+		return super.update(dto);
+	}
+
+	public $!{tableDO.getClazName()}DO get(Object idObject) {
+		if (idObject == null) {
+			return null;
+		}
+		Long id = null;
+		if (idObject instanceof Number) {
+			id = ((Number) idObject).longValue();
+		} else if (idObject instanceof String) {
+			id = Long.valueOf((String) idObject);
+		}
+		$!{tableDO.getClazName()}DO query = new $!{tableDO.getClazName()}DO();
+		query.setId(id);
+		query = search(query);
+		List<$!{tableDO.getClazName()}DO> list = query.getDatas();
+		if (list != null && !list.isEmpty()) {
+			return list.get(0);
+		}
+		return null;
+	}
+
+	public List<$!{tableDO.getClazName()}DO> select() {
+		$!{tableDO.getClazName()}DO query = new $!{tableDO.getClazName()}DO();
+		query = search(query);
+		return query.getDatas();
+	}
+
+	public List<$!{tableDO.getClazName()}DO> select($!{tableDO.getClazName()}DO query) {
+		query = search(query);
+		return query.getDatas();
+	}
+
+	public $!{tableDO.getClazName()}DO selectOne($!{tableDO.getClazName()}DO query) {
+		query.set_pageSize(1);
+		query = search(query);
+		return query;
+	}
+
+	public long count($!{tableDO.getClazName()}DO query) {
+		query = search(query);
+		return query.get_count();
+	}
+
+	public boolean exist($!{tableDO.getClazName()}DO query) {
+		if (query == null) {
+			return false;
+		}
+		query = search(query);
+		return query.get_count() > 0L;
+	}
+
+	public void foreachByOffset(com.intkr.saas.dao.BaseDAO.ForeachCallback<$!{tableDO.getClazName()}DO> callback) {
+		throw new RuntimeException("unsupported!");
+	}
+
+	public void foreachById(com.intkr.saas.dao.BaseDAO.ForeachCallback<$!{tableDO.getClazName()}DO> callback) {
+		throw new RuntimeException("unsupported!");
+	}
+
+}

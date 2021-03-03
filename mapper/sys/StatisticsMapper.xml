@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="statistics">
+
+	<resultMap id="StatisticsDO" type="com.intkr.saas.domain.dbo.sys.StatisticsDO"> 
+        <result property="id" column="id"/> 
+        <result property="time" column="time"/> 
+        <result property="type" column="type"/> 
+        <result property="num" column="num"/> 
+        <result property="feature" column="feature"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.sys.StatisticsDO">
+		insert into
+			sys_statistics(id , time ,  type , num , feature , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{time} , #{type} , #{num} , #{feature} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			sys_statistics
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			sys_statistics
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.sys.StatisticsDO">
+		update 
+			sys_statistics 
+		set 
+			<if test="time != null and time != ''">  
+			    time = #{time} , 
+			</if>  
+			<if test="type != null and type != ''">  
+			    type = #{type} , 
+			</if>  
+			<if test="num != null and num != ''">  
+			    num = #{num} , 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    feature = #{feature} , 
+			</if>  
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="StatisticsDO">
+		select
+			*
+		from
+			sys_statistics
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="time != null and time != ''">  
+			    and time = #{time} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if> 
+			<if test="num != null and num != ''">  
+			    and num = #{num} 
+			</if> 
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if> 
+		order by 
+			gmt_modified desc
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			sys_statistics
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="time != null and time != ''">  
+			    and time = #{time} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if> 
+			<if test="num != null and num != ''">  
+			    and num = #{num} 
+			</if> 
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if> 
+	</select>
+
+</mapper> 

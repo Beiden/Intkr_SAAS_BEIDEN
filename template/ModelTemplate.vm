@@ -1,0 +1,41 @@
+{{tableClassName}}Model = {};
+{{tableClassName}}Model.insert = function(param){
+	param.action = "{{moduleDir}}{{tableClassName}}Action";
+	param.event_submit_doAdd = "true";
+	return IK.request(param);
+}
+{{tableClassName}}Model.delete = function(itemId){
+	var param = {};
+	param.action = "{{moduleDir}}{{tableClassName}}Action";
+	param.event_submit_doDeleteOne = "true";
+	param.deleteId = itemId;
+	return IK.request(param);
+}
+{{tableClassName}}Model.deleteAll = function(deleteIds){
+	var param = {};
+	param.action = "{{moduleDir}}{{tableClassName}}Action";
+	param.event_submit_doDeleteAll = "true";
+	param.deleteIds = deleteIds;
+	return IK.request(param);
+}
+{{tableClassName}}Model.update = function(param){
+	param.action = "{{moduleDir}}{{tableClassName}}Action";
+	param.event_submit_doUpdate = "true";
+	return IK.request(param);
+}
+{{tableClassName}}Model.select = function(param){
+	if(!param){
+		param = {};
+	}
+	param.action = "{{moduleDir}}{{tableClassName}}Action";
+	param.event_submit_doQuery = "true";
+	return IK.request(param);
+}
+{{tableClassName}}Model.selectCount = function(param){
+	if(!param){
+		param = {};
+	}
+	param.action = "{{moduleDir}}{{tableClassName}}Action";
+	param.event_submit_doQueryAndCount = "true";
+	return IK.request(param);
+}

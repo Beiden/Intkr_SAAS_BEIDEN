@@ -1,0 +1,54 @@
+package ${Context.clazPackage}module.action$!{Context.module};
+
+#if($tableDO.containDate())
+import java.util.Date;
+
+#end
+import com.intkr.saas.util.claz.IOC;
+import com.intkr.saas.manager.BaseManager;
+import javax.servlet.http.HttpServletRequest;
+import com.intkr.saas.module.action.BaseAction;
+import com.intkr.saas.util.RequestUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ${Context.clazPackage}domain.bo$!{Context.module}.$!{tableDO.getClazName()}BO;
+import ${Context.clazPackage}manager$!{Context.module}.$!{tableDO.getClazName()}Manager;
+import com.intkr.saas.util.PagerUtil;
+
+/**
+ * $!{tableDO.desc}
+ * 
+ * @table $!{tableDO.name}
+ * 
+ * @author Beiden
+ * @date $!{Context.getTime()}
+ * @version 1.0
+ */
+public class $!{tableDO.getClazName()}Action extends BaseAction<$!{tableDO.getClazName()}BO> {
+
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	private $!{tableDO.getClazName()}Manager $!{tableDO.getProName()}Manager = IOC.get($!{tableDO.getClazName()}Manager.class);
+
+	public $!{tableDO.getClazName()}BO getBO(HttpServletRequest request) {
+		$!{tableDO.getClazName()}BO $!{tableDO.getProName()}BO = getParameter(request);
+		return $!{tableDO.getProName()}BO;
+	}
+
+	public static $!{tableDO.getClazName()}BO getParameter(HttpServletRequest request) {
+		$!{tableDO.getClazName()}BO $!{tableDO.getProName()}BO = new $!{tableDO.getClazName()}BO();
+#foreach($column in $tableDO.columns)
+#if($!{column.name} != "gmt_modified" && $!{column.name} != "is_deleted" && $!{column.name} != "ctime" && $!{column.name} != "mtime" && $!{column.name} != "gmt_created" && $!{column.name} != "gmtModified" && $!{column.name} != "isDeleted" && $!{column.name} != "gmtCreated")
+		$!{tableDO.getProName()}BO.set$!{column.getClazName()}(RequestUtil.getParam(request, "$!{column.getProName()}", $!{column.clazType}.class));
+#end#end
+		PagerUtil.initPage(request, $!{tableDO.getProName()}BO);
+		return $!{tableDO.getProName()}BO;
+	}
+
+	public BaseManager<?, ?> getBaseManager() {
+		return $!{tableDO.getProName()}Manager;
+	}
+
+}

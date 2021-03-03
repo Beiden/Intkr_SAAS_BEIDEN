@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="monitor">
+
+	<resultMap id="MonitorDO" type="com.intkr.saas.domain.dbo.sys.MonitorDO"> 
+        <result property="id" column="id"/> 
+        <result property="type" column="type"/> 
+        <result property="result" column="result"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.sys.MonitorDO">
+		insert into
+			sys_monitor(id , type , result , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{type} , #{result} , now() , now() , 0)
+	</insert>
+	
+	<delete id="deleteReal">
+		delete from
+			sys_monitor
+		where
+			gmt_created &lt;= #{maxGmtCreated}
+	</delete>
+	
+	<delete id="delete">
+		update
+			sys_monitor
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			sys_monitor
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.sys.MonitorDO">
+		update 
+			sys_monitor 
+		set 
+			<if test="type != null and type != ''">  
+			    type = #{type} , 
+			</if>  
+			<if test="result != null and result != ''">  
+			    result = #{result} , 
+			</if>  
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="MonitorDO">
+		select
+			*
+		from
+			sys_monitor
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if> 
+			<if test="result != null and result != ''">  
+			    and result = #{result} 
+			</if> 
+		order by 
+			gmt_modified desc
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			sys_monitor
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if> 
+			<if test="result != null and result != ''">  
+			    and result = #{result} 
+			</if> 
+	</select>
+
+</mapper> 

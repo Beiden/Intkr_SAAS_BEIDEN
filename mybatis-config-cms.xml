@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<environments default="development">
+		<environment id="default">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${cms.jdbcDriver}" />
+				<property name="url" value="${cms.jdbcUrl}" />
+				<property name="username" value="${cms.jdbcUser}" />
+				<property name="password" value="${cms.jdbcPasswd}" />
+				<property name="poolMaximumIdleConnections" value="5"/>
+                <property name="poolMaximumActiveConnections" value="1000"/>
+                <property name="poolPingQuery" value="SELECT 1 FROM DUAL" />  
+                <property name="poolPingEnabled" value="true" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+	
+		<mapper resource="mapper/db/DatabaseMapper.xml" />
+		<mapper resource="mapper/db/DatasourceDatabaseMapper.xml" />
+		<mapper resource="mapper/db/DatasourceMapper.xml" />
+		<mapper resource="mapper/db/FieldMapper.xml" />
+		<mapper resource="mapper/db/TableMapper.xml" />
+		
+		<mapper resource="mapper/opa/ApiExtMapper.xml" />
+		<mapper resource="mapper/opa/ApiInvokeLogMapper.xml" />
+		<mapper resource="mapper/opa/ApiMapper.xml" />
+		<mapper resource="mapper/opa/ApiMockMapper.xml" />
+		<mapper resource="mapper/opa/ApiParamMapper.xml" />
+		<mapper resource="mapper/opa/ApiTestCaseMapper.xml" />
+		<mapper resource="mapper/opa/ApiTestCaseStepMapper.xml" />
+		<mapper resource="mapper/opa/AppMapper.xml" />
+		
+		<mapper resource="mapper/lang/LanguageMapper.xml" />
+		<mapper resource="mapper/lang/LangContentMapper.xml" />
+		<mapper resource="mapper/lang/LangContentTranslateMapper.xml" />
+		
+		<mapper resource="mapper/conf/AreaMapper.xml" />
+		<mapper resource="mapper/conf/OptionMapper.xml" />
+		<mapper resource="mapper/conf/IdMapper.xml" />
+		<mapper resource="mapper/conf/DesktopMapper.xml" />
+		<mapper resource="mapper/conf/SysImgMapper.xml" />
+		
+		<mapper resource="mapper/log/LogMapper.xml" />
+		<mapper resource="mapper/log/SignLogMapper.xml" />
+		<mapper resource="mapper/log/SysLogMapper.xml" />
+		<mapper resource="mapper/log/UserLogMapper.xml" />
+		
+		<mapper resource="mapper/saas/SaasConfigMapper.xml" />
+		<mapper resource="mapper/saas/SaasDomainMapper.xml" />
+		<mapper resource="mapper/saas/SaasClientMapper.xml" />
+		<mapper resource="mapper/saas/SaasThemeMapper.xml" />
+
+		<mapper resource="mapper/timer/TimerMapper.xml" />
+		<mapper resource="mapper/sys/MonitorMapper.xml" />
+		<mapper resource="mapper/sys/StatisticsCodeMapper.xml" />
+		<mapper resource="mapper/sys/StatisticsMapper.xml" />
+				
+		<mapper resource="mapper/user/UserMapper.xml" />
+		<mapper resource="mapper/user/WxAccountMapper.xml" />
+		<mapper resource="mapper/user/RightMapper.xml" />
+		<mapper resource="mapper/user/RoleMapper.xml" />
+		<mapper resource="mapper/user/RoleApplyMapper.xml" />
+		<mapper resource="mapper/user/SecureQuestionMapper.xml" />
+		<mapper resource="mapper/user/UserRightMapper.xml" />
+		<mapper resource="mapper/user/UserRoleMapper.xml" />
+		<mapper resource="mapper/user/RoleRightMapper.xml" />
+		<mapper resource="mapper/user/MoneyAccountMapper.xml" />
+		<mapper resource="mapper/user/MoneyAccountFlowMapper.xml" />
+		<mapper resource="mapper/user/MoneyOperLogMapper.xml" />
+		<mapper resource="mapper/user/MoneyOperMapper.xml" />
+		
+		<mapper resource="mapper/tool/ToolMapper.xml" />
+		<mapper resource="mapper/article/ArticleMapper.xml" />
+		<mapper resource="mapper/article/ArticleCategoryMapper.xml" />
+		<mapper resource="mapper/article/ArticleCategoryRelatedMapper.xml" />
+		<mapper resource="mapper/article/ArticleTagMapper.xml" />
+		<mapper resource="mapper/article/ArticleTagRelatedMapper.xml" />
+		<mapper resource="mapper/article/ArticleCommentMapper.xml" />
+		<mapper resource="mapper/page/PageMapper.xml" />
+		<mapper resource="mapper/page/PageCategoryMapper.xml" />
+		<mapper resource="mapper/page/PageCategoryRelatedMapper.xml" />
+		<mapper resource="mapper/page/PageTagRelatedMapper.xml" />
+		<mapper resource="mapper/menu/FrontMenuDetailMapper.xml" />
+		<mapper resource="mapper/menu/FrontMenuMapper.xml" />
+		<mapper resource="mapper/link/LinkMapper.xml" />
+		<mapper resource="mapper/ad/AdvertisementMapper.xml" />
+		<mapper resource="mapper/ad/AdvertisementPositionMapper.xml" />
+		<mapper resource="mapper/consult/ConsultMapper.xml" />
+		<mapper resource="mapper/consult/ConsultTypeMapper.xml" />
+		<mapper resource="mapper/tag/TagMapper.xml" />
+		<mapper resource="mapper/tag/TagRelatedMapper.xml" />
+		
+		<mapper resource="mapper/fs/ImgMapper.xml" />
+		<mapper resource="mapper/fs/MediaMapper.xml" />
+		<mapper resource="mapper/fs/CategoryMapper.xml" />
+		<mapper resource="mapper/fs/CategoryRelatedMapper.xml" />
+		<mapper resource="mapper/fs/RelationshipMapper.xml" />
+		
+		<mapper resource="mapper/sns/ContactMapper.xml" />
+		<mapper resource="mapper/sns/EmailTemplateMapper.xml" />
+		<mapper resource="mapper/sns/MsgMapper.xml" />
+		<mapper resource="mapper/sns/MsgRecordMapper.xml" />
+		<mapper resource="mapper/sns/MsgSignatureMapper.xml" />
+		<mapper resource="mapper/sns/MsgTemplateMapper.xml" />
+		
+		<mapper resource="mapper/opa/OaLogMapper.xml" />
+		<mapper resource="mapper/opa/OaClientMapper.xml" />
+		<mapper resource="mapper/shop/ShopMapper.xml" />
+		<mapper resource="mapper/shop/ShopApplyMapper.xml" />
+		<mapper resource="mapper/shop/ShopClientMapper.xml" />
+		<mapper resource="mapper/shop/ShopActivityMapper.xml" />
+		<mapper resource="mapper/shop/ShopNoteMapper.xml" />
+		<mapper resource="mapper/shop/ShopAccuMapper.xml" />
+		<mapper resource="mapper/shop/ShopComplaintMapper.xml" />
+		<mapper resource="mapper/shop/ItemSellRecordMapper.xml" />
+		<mapper resource="mapper/shop/ShopCommentMapper.xml" />
+		<mapper resource="mapper/shop/DeliveryFeeTemplateMapper.xml" />
+		<mapper resource="mapper/item/ItemBrandMapper.xml" />
+		<mapper resource="mapper/item/ItemCategoryMapper.xml" />
+		<mapper resource="mapper/item/ItemFcategoryMapper.xml" />
+		<mapper resource="mapper/item/ItemLogMapper.xml" />
+		<mapper resource="mapper/item/ItemMapper.xml" />
+		<mapper resource="mapper/item/ItemTagMapper.xml" />
+		<mapper resource="mapper/item/ItemTagRelatedMapper.xml" />
+		<mapper resource="mapper/item/ItemPropertyMapper.xml" />
+		<mapper resource="mapper/item/ItemPropertyValueMapper.xml" />
+		<mapper resource="mapper/item/ItemSkuMapper.xml" />
+		<mapper resource="mapper/item/ItemSkuPropertyMapper.xml" />
+		<mapper resource="mapper/item/ItemSkuPropertyValueMapper.xml" />
+		<mapper resource="mapper/item/ItemSkuValueMapper.xml" />
+		<mapper resource="mapper/item/ItemSpuMapper.xml" />
+		<mapper resource="mapper/item/ItemSpuTemplateMapper.xml" />
+		<mapper resource="mapper/item/ItemSpuTemplateValueMapper.xml" />
+		<mapper resource="mapper/item/ItemSpuValueMapper.xml" />
+		<mapper resource="mapper/sms/ItemFlashActivityMapper.xml" />
+		<mapper resource="mapper/sms/ItemFlashActivityTimeMapper.xml" />
+		<mapper resource="mapper/sms/ItemFlashActivityTimeItemMapper.xml" />
+		<mapper resource="mapper/sms/ItemCouponActivityMapper.xml" />
+		<mapper resource="mapper/sms/ItemCouponMapper.xml" />
+		<mapper resource="mapper/sms/ItemBrandRecommendMapper.xml" />
+		<mapper resource="mapper/sms/ItemRecommendMapper.xml" />
+		<mapper resource="mapper/sms/ItemPopularMapper.xml" />
+		<mapper resource="mapper/sms/ItemNewMapper.xml" />
+		<mapper resource="mapper/shopping/ItemBuyConsultMapper.xml" />
+		<mapper resource="mapper/shopping/ShoppingCartMapper.xml" />
+		<mapper resource="mapper/shopping/ItemCompareMapper.xml" />
+		<mapper resource="mapper/shopping/ItemFootprintMapper.xml" />
+		<mapper resource="mapper/shopping/ItemCollectMapper.xml" />
+		<mapper resource="mapper/shopping/ShopCollectMapper.xml" />
+		<mapper resource="mapper/order/ItemCustServMapper.xml" />
+		<mapper resource="mapper/order/OrderReturnedMapper.xml" />
+		<mapper resource="mapper/order/DeliveryAddressMapper.xml" />
+		<mapper resource="mapper/order/OrderDetailMapper.xml" />
+		<mapper resource="mapper/order/OrderLogMapper.xml" />
+		<mapper resource="mapper/order/OrderMapper.xml" />
+		<mapper resource="mapper/order/OrderTimeLineMapper.xml" />
+		<mapper resource="mapper/order/PaymentMapper.xml" />
+		<mapper resource="mapper/order/OrderEvaluateMapper.xml" />
+		
+	</mappers>
+
+</configuration>

@@ -1,0 +1,40 @@
+package ${Context.clazPackage}module.screen.admin$!{Context.module};
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ${Context.clazPackage}module.action$!{Context.module}.$!{tableDO.getClazName()}Action;
+import ${Context.clazPackage}domain.bo$!{Context.module}.$!{tableDO.getClazName()}BO;
+import com.intkr.saas.client.log.UserLogClient;
+import ${Context.clazPackage}manager$!{Context.module}.$!{tableDO.getClazName()}Manager;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.intkr.saas.util.claz.IOC;
+
+/**
+ * $!{tableDO.desc}
+ * 
+ * @table $!{tableDO.name}
+ * 
+ * @author Beiden
+ * @date $!{Context.getTime()}
+ * @version 1.0
+ */
+public class $!{tableDO.getClazName()}Mgr {
+
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	private $!{tableDO.getClazName()}Manager manager = IOC.get($!{tableDO.getClazName()}Manager.class);
+
+	public void execute(HttpServletRequest request, HttpServletResponse response) {
+		$!{tableDO.getClazName()}BO query = $!{tableDO.getClazName()}Action.getParameter(request);
+		query.setQuery("orderBy", "id");
+		query.setQuery("order", "desc");
+		query = manager.selectAndCount(query);
+		request.setAttribute("query", query);
+		request.setAttribute("list", query.getDatas());
+		UserLogClient.log(request, "打开", "$!{tableDO.desc}管理");
+	}
+
+}

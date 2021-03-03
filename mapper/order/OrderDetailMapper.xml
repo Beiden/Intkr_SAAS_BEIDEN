@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="orderDetail">
+
+	<resultMap id="OrderDetailDO" type="com.intkr.saas.domain.dbo.order.OrderDetailDO"> 
+        <result property="id" column="id"/> 
+        <result property="saasId" column="saas_id"/> 
+        <result property="type" column="type"/> 
+        <result property="relatedId" column="related_id"/> 
+        <result property="shopId" column="shop_id"/> 
+        <result property="orderId" column="order_id"/> 
+        <result property="itemId" column="item_id"/> 
+        <result property="skuId" column="sku_id"/> 
+        <result property="unitPrice" column="unit_price"/> 
+        <result property="count" column="count"/> 
+        <result property="price" column="price"/> 
+        <result property="feature" column="feature"/> 
+        <result property="isEvaluate" column="is_evaluate"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.order.OrderDetailDO">
+		insert into
+			order_detail(id , saas_id , type , related_id , shop_id , order_id , item_id , sku_id , unit_price , count , price , feature , is_evaluate , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{type} , #{relatedId} , #{shopId} , #{orderId} , #{itemId} , #{skuId} , #{unitPrice} , #{count} , #{price} , #{feature} , #{isEvaluate} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			order_detail
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			order_detail
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.order.OrderDetailDO">
+		update 
+			order_detail 
+		set 
+			<if test="shopId != null and shopId != ''">  
+			    shop_id = #{shopId} , 
+			</if>  
+			<if test="type != null and type != ''">  
+			    type = #{type} , 
+			</if>  
+			<if test="relatedId != null and relatedId != ''">  
+			    related_id = #{relatedId} , 
+			</if>  
+			<if test="orderId != null and orderId != ''">  
+			    order_id = #{orderId} , 
+			</if>  
+			<if test="itemId != null and itemId != ''">  
+			    item_id = #{itemId} , 
+			</if>  
+			<if test="skuId != null and skuId != ''">  
+			    sku_id = #{skuId} , 
+			</if>  
+			<if test="unitPrice != null and unitPrice != ''">  
+			    unit_price = #{unitPrice} , 
+			</if>  
+			<if test="count != null and count != ''">  
+			    count = #{count} , 
+			</if>  
+			<if test="price != null and price != ''">  
+			    price = #{price} , 
+			</if> 
+			<if test="feature != null and feature != ''">  
+			    feature = #{feature} , 
+			</if> 
+			<if test="isEvaluate != null and isEvaluate != ''">  
+			    is_evaluate = #{isEvaluate} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="getByItemIds" resultMap="OrderDetailDO">
+		select
+			*
+		from
+			order_detail
+		where 
+			is_deleted = 0
+		and
+		    item_id in 
+			<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+            	#{primary}
+        	</foreach>
+	</select>
+	
+	<select id="select" resultMap="OrderDetailDO">
+		select
+			*
+		from
+			order_detail
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="relatedId != null and relatedId != ''">  
+			    and related_id = #{relatedId} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+			    and shop_id = #{shopId} 
+			</if>  
+			<if test="orderId != null and orderId != ''">  
+			    and order_id = #{orderId} 
+			</if> 
+			<if test="itemId != null and itemId != ''">  
+			    and item_id = #{itemId} 
+			</if> 
+			<if test="skuId != null and skuId != ''">  
+			    and sku_id = #{skuId} 
+			</if> 
+			<if test="unitPrice != null and unitPrice != ''">  
+			    and unit_price = #{unitPrice} 
+			</if> 
+			<if test="count != null and count != ''">  
+			    and count = #{count} 
+			</if> 
+			<if test="price != null and price != ''">  
+			    and price = #{price} 
+			</if> 
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if> 
+			<if test="isEvaluate != null and isEvaluate != ''">  
+			    and is_evaluate = #{isEvaluate} 
+			</if> 
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+		    order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			order_detail
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="relatedId != null and relatedId != ''">  
+			    and related_id = #{relatedId} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+			    and shop_id = #{shopId} 
+			</if>  
+			<if test="orderId != null and orderId != ''">  
+			    and order_id = #{orderId} 
+			</if> 
+			<if test="itemId != null and itemId != ''">  
+			    and item_id = #{itemId} 
+			</if> 
+			<if test="skuId != null and skuId != ''">  
+			    and sku_id = #{skuId} 
+			</if> 
+			<if test="unitPrice != null and unitPrice != ''">  
+			    and unit_price = #{unitPrice} 
+			</if> 
+			<if test="count != null and count != ''">  
+			    and count = #{count} 
+			</if> 
+			<if test="price != null and price != ''">  
+			    and price = #{price} 
+			</if> 
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if> 
+			<if test="isEvaluate != null and isEvaluate != ''">  
+			    and is_evaluate = #{isEvaluate} 
+			</if> 
+	</select>
+
+</mapper> 

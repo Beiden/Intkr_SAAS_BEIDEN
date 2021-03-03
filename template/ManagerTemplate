@@ -1,0 +1,19 @@
+package ${Context.clazPackage}manager$!{Context.module};
+
+import com.intkr.saas.manager.BaseManager;
+
+import ${Context.clazPackage}domain.bo$!{Context.module}.$!{tableDO.getClazName()}BO;
+import ${Context.clazPackage}domain.dbo$!{Context.module}.$!{tableDO.getClazName()}DO;
+
+/**
+ * $!{tableDO.desc}
+ * 
+ * @table $!{tableDO.name}
+ * 
+ * @author Beiden
+ * @date $!{Context.getTime()}
+ * @version 1.0
+ */
+public interface $!{tableDO.getClazName()}Manager extends BaseManager<$!{tableDO.getClazName()}BO, $!{tableDO.getClazName()}DO> {
+
+}

@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="demand">
+
+	<resultMap id="DemandDO" type="com.intkr.kww.domain.dbo.DemandDO"> 
+        <result property="id" column="id"/> 
+        <result property="shopId" column="shop_id"/> 
+        <result property="relatedId" column="related_id"/> 
+        <result property="code" column="code"/> 
+        <result property="userId" column="user_id"/> 
+        <result property="type" column="type"/> 
+        <result property="name" column="name"/> 
+        <result property="price" column="price"/> 
+        <result property="unitPrice" column="unit_price"/> 
+        <result property="tradeMethod" column="trade_method"/> 
+        <result property="tradeMethodId" column="trade_method_id"/> 
+        <result property="pinkage" column="pinkage"/> 
+        <result property="paymentMethod" column="payment_method"/> 
+        <result property="location" column="location"/> 
+        <result property="province" column="province"/> 
+        <result property="city" column="city"/> 
+        <result property="area" column="area"/> 
+        <result property="mapLocation" column="map_location"/> 
+        <result property="suttle" column="suttle"/> 
+        <result property="status" column="status"/> 
+        <result property="imgIds" column="img_ids"/> 
+        <result property="content" column="content"/> 
+        <result property="sellCount" column="sell_count"/> 
+        <result property="viewCount" column="view_count"/> 
+        <result property="commentCount" column="comment_count"/> 
+        <result property="praiseUpCount" column="praise_up_count"/> 
+        <result property="praiseDownCount" column="praise_down_count"/> 
+        <result property="likeCount" column="like_count"/> 
+        <result property="collectCount" column="collect_count"/> 
+        <result property="attentionCount" column="attention_count"/> 
+        <result property="feature" column="feature"/> 
+        <result property="inventory" column="inventory"/> 
+        <result property="inventoryCount" column="inventory_count"/> 
+        <result property="evaluateCount" column="evaluate_count"/> 
+        <result property="goodEvaluateRate" column="good_evaluate_rate"/> 
+        <result property="middleEvaluateRate" column="middle_evaluate_rate"/> 
+        <result property="badEvaluateRate" column="bad_evaluate_rate"/> 
+        <result property="firstCategoryId" column="first_category_id"/> 
+        <result property="firstCategoryName" column="first_category_name"/> 
+        <result property="secondCategoryId" column="second_category_id"/> 
+        <result property="secondCategoryName" column="second_category_name"/> 
+        <result property="thirdCategoryId" column="third_category_id"/> 
+        <result property="thirdCategoryName" column="third_category_name"/> 
+        <result property="fourthCategoryId" column="fourth_category_id"/> 
+        <result property="fourthCategoryName" column="fourth_category_name"/> 
+        <result property="fifthCategoryId" column="fifth_category_id"/> 
+        <result property="fifthCategoryName" column="fifth_category_name"/> 
+        <result property="mineName" column="mine_name"/> 
+        <result property="createMethod" column="create_method"/> 
+        <result property="packageMethod" column="package_method"/> 
+        <result property="invoiceMethod" column="invoice_method"/> 
+        <result property="weightError" column="weight_error"/> 
+        <result property="testError" column="test_error"/> 
+        <result property="containTax" column="contain_tax"/> 
+        <result property="storeTime" column="store_time"/> 
+        <result property="deliveryTime" column="delivery_time"/> 
+        <result property="supervisorShopName" column="supervisor_shop_name"/> 
+        <result property="supervisorShopId" column="supervisor_shop_id"/> 
+        <result property="supervisorUserName" column="supervisor_user_name"/> 
+        <result property="supervisorUserId" column="supervisor_user_id"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.kww.domain.dbo.DemandDO">
+		insert into
+            ik_demand
+			(id , shop_id , related_id , inventory , inventory_count , location , province , city , area , map_location , suttle , code , name , type , trade_method , trade_method_id , pinkage , price , unit_price , user_id , status , img_ids , content , feature , sell_count , view_count , comment_count , praise_up_count , praise_down_count , like_count , collect_count , attention_count , evaluate_count , good_evaluate_rate , middle_evaluate_rate , bad_evaluate_rate , first_category_id , first_category_name , second_category_id , second_category_name , third_category_id , third_category_name , fourth_category_id , fourth_category_name , fifth_category_id , fifth_category_name , mine_name , create_method , package_method , invoice_method , weight_error , test_error , contain_tax , store_time , delivery_time , supervisor_shop_name , supervisor_shop_id , supervisor_user_name , supervisor_user_id , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{shopId} , #{relatedId} , #{inventory} , #{inventoryCount} , #{location} , #{province} , #{city} , #{area} , #{mapLocation} , #{suttle} , #{code} , #{name} , #{type} , #{tradeMethod} , #{tradeMethodId} , #{pinkage} , #{price} , #{unitPrice} , #{userId} , #{status} , #{imgIds} , #{content} , #{feature} , #{sellCount} , #{viewCount} , #{commentCount} , #{praiseUpCount} , #{praiseDownCount} , #{likeCount} , #{collectCount} , #{attentionCount} , #{evaluateCount} , #{goodEvaluateRate} , #{middleEvaluateRate} , #{badEvaluateRate} , #{firstCategoryId} , #{firstCategoryName} , #{secondCategoryId} , #{secondCategoryName} , #{thirdCategoryId} , #{thirdCategoryName} , #{fourthCategoryId} , #{fourthCategoryName} , #{fifthCategoryId} , #{fifthCategoryName} , #{mineName} , #{createMethod} , #{packageMethod} , #{invoiceMethod} , #{weightError} , #{testError} , #{containTax} , #{storeTime} , #{deliveryTime} , #{supervisorShopName} , #{supervisorShopId} , #{supervisorUserName} , #{supervisorUserId} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+            ik_demand
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+            ik_demand
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.kww.domain.dbo.DemandDO">
+		update 
+            ik_demand
+		set 
+			<if test="shopId != null and shopId != ''">  
+			    shop_id = #{shopId} , 
+			</if> 
+			<if test="relatedId != null and relatedId != ''">  
+			    related_id = #{relatedId} , 
+			</if> 
+			<if test="inventory != null and inventory != ''">  
+			    inventory = #{inventory} , 
+			</if> 
+			<if test="inventoryCount != null and inventoryCount != ''">  
+			    inventory_count = #{inventoryCount} , 
+			</if> 
+			<if test="location != null and location != ''">  
+			    location = #{location} , 
+			</if> 
+			<if test="province != null and province != ''">  
+			    province = #{province} , 
+			</if> 
+			<if test="city != null and city != ''">  
+			    city = #{city} , 
+			</if> 
+			<if test="area != null and area != ''">  
+			    area = #{area} , 
+			</if> 
+			<if test="mapLocation != null and mapLocation != ''">  
+			    map_location = #{mapLocation} , 
+			</if> 
+			<if test="suttle != null and suttle != ''">  
+			    suttle = #{suttle} , 
+			</if> 
+			<if test="code != null and code != ''">  
+			    code = #{code} , 
+			</if> 
+			<if test="type != null and type != ''">  
+			    type = #{type} , 
+			</if> 
+			<if test="userId != null and userId != ''">  
+			    user_id = #{userId} , 
+			</if> 
+			<if test="tradeMethod != null and tradeMethod != ''">  
+			    trade_method = #{tradeMethod} , 
+			</if> 
+			<if test="tradeMethodId != null and tradeMethodId != ''">  
+			    trade_method_id = #{tradeMethodId} , 
+			</if> 
+			<if test="pinkage != null and pinkage != ''">  
+			    pinkage = #{pinkage} , 
+			</if> 
+			<if test="paymentMethod != null and paymentMethod != ''">  
+			    payment_method = #{paymentMethod} , 
+			</if> 
+			<if test="name != null and name != ''">  
+			    name = #{name} , 
+			</if> 
+			<if test="price != null and price != ''">  
+			    price = #{price} , 
+			</if> 
+			<if test="unitPrice != null and unitPrice != ''">  
+			    unit_price = #{unitPrice} , 
+			</if> 
+			<if test="status != null and status != ''">  
+			    status = #{status} , 
+			</if> 
+			<if test="imgIds != null and imgIds != ''">  
+			    img_ids = #{imgIds} , 
+			</if> 
+			<if test="content != null and content != ''">  
+			    content = #{content} , 
+			</if> 
+			<if test="feature != null and feature != ''">  
+			    feature = #{feature} , 
+			</if> 
+			<if test="sellCount != null and sellCount != ''">  
+			    sell_count = #{sellCount} , 
+			</if> 
+			<if test="viewCount != null and viewCount != ''">  
+			    view_count = #{viewCount} , 
+			</if> 
+			<if test="commentCount != null and commentCount != ''">  
+			    comment_count = #{commentCount} , 
+			</if> 
+			<if test="praiseUpCount != null and praiseUpCount != ''">  
+			    praise_up_count = #{praiseUpCount} , 
+			</if> 
+			<if test="praiseDownCount != null and praiseDownCount != ''">  
+			    praise_down_count = #{praiseDownCount} , 
+			</if> 
+			<if test="likeCount != null and likeCount != ''">  
+			    like_count = #{likeCount} , 
+			</if> 
+			<if test="collectCount != null and collectCount != ''">  
+			    collect_count = #{collectCount} , 
+			</if> 
+			<if test="attentionCount != null and attentionCount != ''">  
+			    attention_count = #{attentionCount} , 
+			</if> 
+			<if test="evaluateCount != null and evaluateCount != ''">  
+			    evaluate_count = #{evaluateCount} , 
+			</if> 
+			<if test="goodEvaluateRate != null and goodEvaluateRate != ''">  
+			    good_evaluate_rate = #{goodEvaluateRate} , 
+			</if> 
+			<if test="middleEvaluateRate != null and middleEvaluateRate != ''">  
+			    middle_evaluate_rate = #{middleEvaluateRate} , 
+			</if> 
+			<if test="badEvaluateRate != null and badEvaluateRate != ''">  
+			    bad_evaluate_rate = #{badEvaluateRate} , 
+			</if> 
+			<if test="firstCategoryId != null and firstCategoryId != ''">  
+			    first_category_id = #{firstCategoryId} , 
+			</if> 
+			<if test="firstCategoryName != null and firstCategoryName != ''">  
+			    first_category_Name = #{firstCategoryName} , 
+			</if> 
+			<if test="secondCategoryId != null and secondCategoryId != ''">  
+			    second_category_id = #{secondCategoryId} , 
+			</if> 
+			<if test="secondCategoryName != null and secondCategoryName != ''">  
+			    second_category_Name = #{secondCategoryName} , 
+			</if> 
+			<if test="thirdCategoryId != null and thirdCategoryId != ''">  
+			    third_category_id = #{thirdCategoryId} , 
+			</if> 
+			<if test="thirdCategoryName != null and thirdCategoryName != ''">  
+			    third_category_Name = #{thirdCategoryName} , 
+			</if> 
+			<if test="fourthCategoryId != null and fourthCategoryId != ''">  
+			    fourth_category_id = #{fourthCategoryId} , 
+			</if> 
+			<if test="fourthCategoryName != null and fourthCategoryName != ''">  
+			    fourth_category_Name = #{fourthCategoryName} , 
+			</if> 
+			<if test="fifthCategoryId != null and fifthCategoryId != ''">  
+			    fifth_category_id = #{fifthCategoryId} , 
+			</if> 
+			<if test="fifthCategoryName != null and fifthCategoryName != ''">  
+			    fifth_category_Name = #{fifthCategoryName} , 
+			</if> 
+			<if test="mineName != null and mineName != ''">  
+			    mine_name = #{mineName} , 
+			</if> 
+			<if test="createMethod != null and createMethod != ''">  
+			    create_method = #{createMethod} , 
+			</if> 
+			<if test="packageMethod != null and packageMethod != ''">  
+			    package_method = #{packageMethod} , 
+			</if> 
+			<if test="invoiceMethod != null and invoiceMethod != ''">  
+			    invoice_method = #{invoiceMethod} , 
+			</if> 
+			<if test="weightError != null and weightError != ''">  
+			    weight_error = #{weightError} , 
+			</if> 
+			<if test="testError != null and testError != ''">  
+			    test_error = #{testError} , 
+			</if> 
+			<if test="containTax != null and containTax != ''">  
+			    contain_tax = #{containTax} , 
+			</if> 
+			<if test="storeTime != null and storeTime != ''">  
+			    store_time = #{storeTime} , 
+			</if> 
+			<if test="deliveryTime != null and deliveryTime != ''">  
+			    delivery_time = #{deliveryTime} , 
+			</if> 
+			<if test="supervisorShopName != null and supervisorShopName != ''">  
+			    supervisor_shop_name = #{supervisorShopName} , 
+			</if> 
+			<if test="supervisorShopId != null and supervisorShopId != ''">  
+			    supervisor_shop_id = #{supervisorShopId} , 
+			</if> 
+			<if test="supervisorUserName != null and supervisorUserName != ''">  
+			    supervisor_user_name = #{supervisorUserName} , 
+			</if> 
+			<if test="supervisorUserId != null and supervisorUserId != ''">  
+			    supervisor_user_id = #{supervisorUserId} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="DemandDO">
+		select
+			*
+		from
+            ik_demand
+		where 
+			is_deleted = 0
+			<if test="shopId != null and shopId != ''">  
+			    and shop_id = #{shopId} 
+			</if>  
+			<if test="relatedId != null and relatedId != ''">  
+			    and related_id = #{relatedId} 
+			</if>  
+			<if test="inventory != null and inventory != ''">  
+			    and inventory = #{inventory} 
+			</if>  
+			<if test="inventoryCount != null and inventoryCount != ''">  
+			    and inventory_count = #{inventoryCount} 
+			</if>  
+			<if test="location != null and location != ''">  
+			    and location = #{location} 
+			</if>  
+			<if test="province != null and province != ''">  
+			    and province = #{province} 
+			</if>  
+			<if test="city != null and city != ''">  
+			    and city = #{city} 
+			</if>  
+			<if test="area != null and area != ''">  
+			    and area = #{area} 
+			</if>  
+			<if test="mapLocation != null and mapLocation != ''">  
+			    and map_location = #{mapLocation} 
+			</if>  
+			<if test="suttle != null and suttle != ''">  
+			    and suttle = #{suttle} 
+			</if>  
+			<if test="code != null and code != ''">  
+			    and code = #{code} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+			    and user_id = #{userId} 
+			</if>  
+			<if test="tradeMethod != null and tradeMethod != ''">  
+			    and trade_method = #{tradeMethod} 
+			</if>  
+			<if test="tradeMethodId != null and tradeMethodId != ''">  
+			    and trade_method_id = #{tradeMethodId} 
+			</if>  
+			<if test="pinkage != null and pinkage != ''">  
+			    and pinkage = #{pinkage} 
+			</if>  
+			<if test="paymentMethod != null and paymentMethod != ''">  
+			    and payment_method = #{paymentMethod} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="status != null and status != ''">  
+			    and status = #{status} 
+			</if>  
+			<if test="imgIds != null and imgIds != ''">  
+			    and img_ids = #{imgIds} 
+			</if>  
+			<if test="content != null and content != ''">  
+			    and content = #{content} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if>  
+			<if test="sellCount != null and sellCount != ''">  
+			    and sell_count = #{sellCount} 
+			</if>  
+			<if test="viewCount != null and viewCount != ''">  
+			    and view_count = #{viewCount} 
+			</if>  
+			<if test="commentCount != null and commentCount != ''">  
+			    and comment_count = #{commentCount} 
+			</if>  
+			<if test="praiseUpCount != null and praiseUpCount != ''">  
+			    and praise_up_count = #{praiseUpCount} 
+			</if>  
+			<if test="praiseDownCount != null and praiseDownCount != ''">  
+			    and praise_down_count = #{praiseDownCount} 
+			</if>  
+			<if test="likeCount != null and likeCount != ''">  
+			    and like_count = #{likeCount} 
+			</if>  
+			<if test="collectCount != null and collectCount != ''">  
+			    and collect_count = #{collectCount} 
+			</if>  
+			<if test="attentionCount != null and attentionCount != ''">  
+			    and attention_count = #{attentionCount} 
+			</if>  
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="evaluateCount != null and evaluateCount != ''">  
+			    and evaluate_count = #{evaluateCount} 
+			</if>  
+			<if test="goodEvaluateRate != null and goodEvaluateRate != ''">  
+			    and good_evaluate_rate = #{goodEvaluateRate} 
+			</if>  
+			<if test="middleEvaluateRate != null and middleEvaluateRate != ''">  
+			    and middle_evaluate_rate = #{middleEvaluateRate} 
+			</if>  
+			<if test="badEvaluateRate != null and badEvaluateRate != ''">  
+			    and bad_evaluate_rate = #{badEvaluateRate} 
+			</if>  
+			<if test="firstCategoryId != null and firstCategoryId != ''">  
+			    and first_category_id = #{firstCategoryId} 
+			</if>  
+			<if test="firstCategoryName != null and firstCategoryName != ''">  
+			    and first_category_Name = #{firstCategoryName} 
+			</if>  
+			<if test="secondCategoryId != null and secondCategoryId != ''">  
+			    and second_category_id = #{secondCategoryId} 
+			</if>  
+			<if test="secondCategoryName != null and secondCategoryName != ''">  
+			    and second_category_Name = #{secondCategoryName} 
+			</if>  
+			<if test="thirdCategoryId != null and thirdCategoryId != ''">  
+			    and third_category_id = #{thirdCategoryId} 
+			</if>  
+			<if test="thirdCategoryName != null and thirdCategoryName != ''">  
+			    and third_category_Name = #{thirdCategoryName} 
+			</if>  
+			<if test="fourthCategoryId != null and fourthCategoryId != ''">  
+			    and fourth_category_id = #{fourthCategoryId} 
+			</if>  
+			<if test="fourthCategoryName != null and fourthCategoryName != ''">  
+			    and fourth_category_Name = #{fourthCategoryName} 
+			</if>  
+			<if test="fifthCategoryId != null and fifthCategoryId != ''">  
+			    and fifth_category_id = #{fifthCategoryId} 
+			</if>  
+			<if test="fifthCategoryName != null and fifthCategoryName != ''">  
+			    and fifth_category_Name = #{fifthCategoryName} 
+			</if>  
+			<if test="mineName != null and mineName != ''">  
+			    and mine_name = #{mineName} 
+			</if>  
+			<if test="createMethod != null and createMethod != ''">  
+			    and create_method = #{createMethod} 
+			</if>  
+			<if test="packageMethod != null and packageMethod != ''">  
+			    and package_method = #{packageMethod} 
+			</if>  
+			<if test="invoiceMethod != null and invoiceMethod != ''">  
+			    and invoice_method = #{invoiceMethod} 
+			</if>  
+			<if test="weightError != null and weightError != ''">  
+			    and weight_error = #{weightError} 
+			</if>  
+			<if test="testError != null and testError != ''">  
+			    and test_error = #{testError} 
+			</if>  
+			<if test="containTax != null and containTax != ''">  
+			    and contain_tax = #{containTax} 
+			</if>  
+			<if test="storeTime != null and storeTime != ''">  
+			    and store_time = #{storeTime} 
+			</if>  
+			<if test="deliveryTime != null and deliveryTime != ''">  
+			    and delivery_time = #{deliveryTime} 
+			</if>  
+			<if test="supervisorShopName != null and supervisorShopName != ''">  
+			    and supervisor_shop_name = #{supervisorShopName} 
+			</if>  
+			<if test="supervisorShopId != null and supervisorShopId != ''">  
+			    and supervisor_shop_id = #{supervisorShopId} 
+			</if>  
+			<if test="supervisorUserName != null and supervisorUserName != ''">  
+			    and supervisor_user_name = #{supervisorUserName} 
+			</if>  
+			<if test="supervisorUserId != null and supervisorUserId != ''">  
+			    and supervisor_user_id = #{supervisorUserId} 
+			</if>  
+			<if test="query != null and query != '' and query.statusSet != null and query.statusSet != ''">  
+			    and status in 
+					<foreach item="statusTmp" collection="query.statusSet" open="(" separator="," close=")">
+		            	#{statusTmp}
+		        	</foreach>
+			</if>
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+		    order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+            ik_demand
+		where
+			is_deleted = 0
+			<if test="shopId != null and shopId != ''">  
+			    and shop_id = #{shopId} 
+			</if>  
+			<if test="relatedId != null and relatedId != ''">  
+			    and related_id = #{relatedId} 
+			</if>  
+			<if test="inventory != null and inventory != ''">  
+			    and inventory = #{inventory} 
+			</if>  
+			<if test="inventoryCount != null and inventoryCount != ''">  
+			    and inventory_count = #{inventoryCount} 
+			</if>  
+			<if test="location != null and location != ''">  
+			    and location = #{location} 
+			</if>  
+			<if test="province != null and province != ''">  
+			    and province = #{province} 
+			</if>  
+			<if test="city != null and city != ''">  
+			    and city = #{city} 
+			</if>  
+			<if test="area != null and area != ''">  
+			    and area = #{area} 
+			</if>  
+			<if test="mapLocation != null and mapLocation != ''">  
+			    and map_location = #{mapLocation} 
+			</if>  
+			<if test="suttle != null and suttle != ''">  
+			    and suttle = #{suttle} 
+			</if>  
+			<if test="code != null and code != ''">  
+			    and code = #{code} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+			    and user_id = #{userId} 
+			</if>  
+			<if test="tradeMethod != null and tradeMethod != ''">  
+			    and trade_method = #{tradeMethod} 
+			</if>  
+			<if test="tradeMethodId != null and tradeMethodId != ''">  
+			    and trade_method_id = #{tradeMethodId} 
+			</if>  
+			<if test="pinkage != null and pinkage != ''">  
+			    and pinkage = #{pinkage} 
+			</if>  
+			<if test="paymentMethod != null and paymentMethod != ''">  
+			    and payment_method = #{paymentMethod} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="status != null and status != ''">  
+			    and status = #{status} 
+			</if>  
+			<if test="content != null and content != ''">  
+			    and content = #{content} 
+			</if>  
+			<if test="imgIds != null and imgIds != ''">  
+			    and img_ids = #{imgIds} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if>  
+			<if test="sellCount != null and sellCount != ''">  
+			    and sell_count = #{sellCount} 
+			</if>  
+			<if test="viewCount != null and viewCount != ''">  
+			    and view_count = #{viewCount} 
+			</if>  
+			<if test="commentCount != null and commentCount != ''">  
+			    and comment_count = #{commentCount} 
+			</if>  
+			<if test="praiseUpCount != null and praiseUpCount != ''">  
+			    and praise_up_count = #{praiseUpCount} 
+			</if>  
+			<if test="praiseDownCount != null and praiseDownCount != ''">  
+			    and praise_down_count = #{praiseDownCount} 
+			</if>  
+			<if test="likeCount != null and likeCount != ''">  
+			    and like_count = #{likeCount} 
+			</if>  
+			<if test="collectCount != null and collectCount != ''">  
+			    and collect_count = #{collectCount} 
+			</if>  
+			<if test="attentionCount != null and attentionCount != ''">  
+			    and attention_count = #{attentionCount} 
+			</if>  
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="inProcessStartTime != null and inProcessStartTime != ''">  
+			    and in_process_start_time = #{inProcessStartTime} 
+			</if>  
+			<if test="inProcessEndTime != null and inProcessEndTime != ''">  
+			    and in_process_end_time = #{inProcessEndTime} 
+			</if>  
+			<if test="preHeatStartTime != null and preHeatStartTime != ''">  
+			    and pre_heat_start_time = #{preHeatStartTime} 
+			</if>  
+			<if test="preHeatEndTime != null and preHeatEndTime != ''">  
+			    and pre_heat_end_time = #{preHeatEndTime} 
+			</if>  
+			<if test="priceStep != null and priceStep != ''">  
+			    and price_step = #{priceStep} 
+			</if>  
+			<if test="result != null and result != ''">  
+			    and result = #{result} 
+			</if>  
+			<if test="resultTime != null and resultTime != ''">  
+			    and result_time = #{resultTime} 
+			</if>  
+			<if test="param != null and param != ''">  
+			    and param = #{param} 
+			</if>  
+			<if test="evaluateCount != null and evaluateCount != ''">  
+			    and evaluate_count = #{evaluateCount} 
+			</if>  
+			<if test="goodEvaluateRate != null and goodEvaluateRate != ''">  
+			    and good_evaluate_rate = #{goodEvaluateRate} 
+			</if>  
+			<if test="middleEvaluateRate != null and middleEvaluateRate != ''">  
+			    and middle_evaluate_rate = #{middleEvaluateRate} 
+			</if>  
+			<if test="badEvaluateRate != null and badEvaluateRate != ''">  
+			    and bad_evaluate_rate = #{badEvaluateRate} 
+			</if>  
+			<if test="firstCategoryId != null and firstCategoryId != ''">  
+			    and first_category_id = #{firstCategoryId} 
+			</if>  
+			<if test="firstCategoryName != null and firstCategoryName != ''">  
+			    and first_category_Name = #{firstCategoryName} 
+			</if>  
+			<if test="secondCategoryId != null and secondCategoryId != ''">  
+			    and second_category_id = #{secondCategoryId} 
+			</if>  
+			<if test="secondCategoryName != null and secondCategoryName != ''">  
+			    and second_category_Name = #{secondCategoryName} 
+			</if>  
+			<if test="thirdCategoryId != null and thirdCategoryId != ''">  
+			    and third_category_id = #{thirdCategoryId} 
+			</if>  
+			<if test="thirdCategoryName != null and thirdCategoryName != ''">  
+			    and third_category_Name = #{thirdCategoryName} 
+			</if>  
+			<if test="fourthCategoryId != null and fourthCategoryId != ''">  
+			    and fourth_category_id = #{fourthCategoryId} 
+			</if>  
+			<if test="fourthCategoryName != null and fourthCategoryName != ''">  
+			    and fourth_category_Name = #{fourthCategoryName} 
+			</if>  
+			<if test="fifthCategoryId != null and fifthCategoryId != ''">  
+			    and fifth_category_id = #{fifthCategoryId} 
+			</if>  
+			<if test="fifthCategoryName != null and fifthCategoryName != ''">  
+			    and fifth_category_Name = #{fifthCategoryName} 
+			</if>  
+			<if test="mineName != null and mineName != ''">  
+			    and mine_name = #{mineName} 
+			</if>  
+			<if test="createMethod != null and createMethod != ''">  
+			    and create_method = #{createMethod} 
+			</if>  
+			<if test="packageMethod != null and packageMethod != ''">  
+			    and package_method = #{packageMethod} 
+			</if>  
+			<if test="invoiceMethod != null and invoiceMethod != ''">  
+			    and invoice_method = #{invoiceMethod} 
+			</if>  
+			<if test="weightError != null and weightError != ''">  
+			    and weight_error = #{weightError} 
+			</if>  
+			<if test="testError != null and testError != ''">  
+			    and test_error = #{testError} 
+			</if>  
+			<if test="containTax != null and containTax != ''">  
+			    and contain_tax = #{containTax} 
+			</if>  
+			<if test="storeTime != null and storeTime != ''">  
+			    and store_time = #{storeTime} 
+			</if>  
+			<if test="deliveryTime != null and deliveryTime != ''">  
+			    and delivery_time = #{deliveryTime} 
+			</if>  
+			<if test="supervisorShopName != null and supervisorShopName != ''">  
+			    and supervisor_shop_name = #{supervisorShopName} 
+			</if>  
+			<if test="supervisorShopId != null and supervisorShopId != ''">  
+			    and supervisor_shop_id = #{supervisorShopId} 
+			</if>  
+			<if test="supervisorUserName != null and supervisorUserName != ''">  
+			    and supervisor_user_name = #{supervisorUserName} 
+			</if>  
+			<if test="supervisorUserId != null and supervisorUserId != ''">  
+			    and supervisor_user_id = #{supervisorUserId} 
+			</if>  
+			<if test="query != null and query != '' and query.statusSet != null and query.statusSet != ''">  
+			    and status in 
+					<foreach item="statusTmp" collection="query.statusSet" open="(" separator="," close=")">
+		            	#{statusTmp}
+		        	</foreach>
+			</if>
+	</select>
+
+</mapper> 

@@ -1,0 +1,34 @@
+package ${Context.clazPackage}manager$!{Context.module}.impl;
+
+import com.intkr.saas.dao.BaseDAO;
+import com.intkr.saas.manager.BaseManagerImpl;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Repository;
+
+import ${Context.clazPackage}dao$!{Context.module}.$!{tableDO.getClazName()}DAO;
+import ${Context.clazPackage}domain.bo$!{Context.module}.$!{tableDO.getClazName()}BO;
+import ${Context.clazPackage}domain.dbo$!{Context.module}.$!{tableDO.getClazName()}DO;
+import ${Context.clazPackage}manager$!{Context.module}.$!{tableDO.getClazName()}Manager;
+
+/**
+ * $!{tableDO.desc}
+ * 
+ * @table $!{tableDO.name}
+ * 
+ * @author Beiden
+ * @date $!{Context.getTime()}
+ * @version 1.0
+ */
+@Repository("$!{tableDO.getClazName()}Manager")
+public class $!{tableDO.getClazName()}ManagerImpl extends BaseManagerImpl<$!{tableDO.getClazName()}BO, $!{tableDO.getClazName()}DO> implements $!{tableDO.getClazName()}Manager {
+
+	@Resource
+	private $!{tableDO.getClazName()}DAO $!{tableDO.getProName()}DAO;
+
+	public BaseDAO<$!{tableDO.getClazName()}DO> getBaseDAO() {
+		return $!{tableDO.getProName()}DAO;
+	}
+
+}

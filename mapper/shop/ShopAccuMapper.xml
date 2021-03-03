@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="shopAccu">
+
+	<resultMap id="resultMapObj" type="com.intkr.saas.domain.dbo.shop.ShopAccuDO"> 
+		<result property="id" column="id"/> 
+		<result property="saasId" column="saas_id"/> 
+		<result property="type" column="type"/> 
+		<result property="shopId" column="shop_id"/> 
+		<result property="itemId" column="item_id"/> 
+		<result property="userId" column="user_id"/> 
+		<result property="status" column="status"/> 
+		<result property="title" column="title"/> 
+		<result property="content" column="content"/> 
+		<result property="feature" column="feature"/> 
+		<result property="gmtModified" column="gmt_modified"/> 
+		<result property="gmtCreated" column="gmt_created"/> 
+		<result property="isDeleted" column="is_deleted"/> 
+	</resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.shop.ShopAccuDO">
+		insert into
+			shop_accu(id , saas_id , type , shop_id , item_id , user_id , status , title , content , feature , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{type} , #{shopId} , #{itemId} , #{userId} , #{status} , #{title} , #{content} , #{feature} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			shop_accu
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			shop_accu
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+					#{primary}
+				</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.shop.ShopAccuDO">
+		update 
+			shop_accu 
+		set 
+			<if test="saasId != null">  
+				saas_id = #{saasId} , 
+			</if> 
+			<if test="type != null">  
+				type = #{type} , 
+			</if> 
+			<if test="shopId != null">  
+				shop_id = #{shopId} , 
+			</if> 
+			<if test="itemId != null">  
+				item_id = #{itemId} , 
+			</if> 
+			<if test="userId != null">  
+				user_id = #{userId} , 
+			</if> 
+			<if test="status != null">  
+				status = #{status} , 
+			</if> 
+			<if test="title != null">  
+				title = #{title} , 
+			</if> 
+			<if test="content != null">  
+				content = #{content} , 
+			</if> 
+			<if test="feature != null">  
+				feature = #{feature} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="resultMapObj">
+		select
+			*
+		from
+			shop_accu
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="type != null and type != ''">  
+				and type = #{type} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+				and shop_id = #{shopId} 
+			</if>  
+			<if test="itemId != null and itemId != ''">  
+				and item_id = #{itemId} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+				and user_id = #{userId} 
+			</if>  
+			<if test="status != null and status != ''">  
+				and status = #{status} 
+			</if>  
+			<if test="title != null and title != ''">  
+				and title = #{title} 
+			</if>  
+			<if test="content != null and content != ''">  
+				and content = #{content} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+			order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			shop_accu
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="type != null and type != ''">  
+				and type = #{type} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+				and shop_id = #{shopId} 
+			</if>  
+			<if test="itemId != null and itemId != ''">  
+				and item_id = #{itemId} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+				and user_id = #{userId} 
+			</if>  
+			<if test="status != null and status != ''">  
+				and status = #{status} 
+			</if>  
+			<if test="title != null and title != ''">  
+				and title = #{title} 
+			</if>  
+			<if test="content != null and content != ''">  
+				and content = #{content} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+	</select>
+
+</mapper> 

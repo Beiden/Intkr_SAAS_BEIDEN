@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 接口日志 -->
+<mapper namespace="oaLog">
+
+	<resultMap id="resultMapObj" type="com.intkr.saas.domain.dbo.opa.OaLogDO"> 
+		<result property="id" column="id"/> 
+		<result property="saasId" column="saas_id"/> 
+		<result property="ip" column="ip"/> 
+		<result property="userId" column="user_id"/> 
+		<result property="referer" column="referer"/> 
+		<result property="goUrl" column="go_url"/> 
+		<result property="queryString" column="query_string"/> 
+		<result property="goAction" column="go_action"/> 
+		<result property="getUrl" column="get_url"/> 
+		<result property="serverCostTime" column="server_cost_time"/> 
+		<result property="clientCostTime" column="client_cost_time"/> 
+		<result property="params" column="params"/> 
+		<result property="feature" column="feature"/> 
+		<result property="gmtModified" column="gmt_modified"/> 
+		<result property="gmtCreated" column="gmt_created"/> 
+		<result property="isDeleted" column="is_deleted"/> 
+	</resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.opa.OaLogDO">
+		insert into
+			oa_log(id , saas_id , ip , user_id , referer , go_url , query_string , go_action , get_url , server_cost_time , client_cost_time , params , feature , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{ip} , #{userId} , #{referer} , #{goUrl} , #{queryString} , #{goAction} , #{getUrl} , #{serverCostTime} , #{clientCostTime} , #{params} , #{feature} , now() , now() , 0)
+	</insert>
+
+	<insert id="inserts">
+		insert into
+			oa_log(id , saas_id , ip , user_id , referer , go_url , query_string , go_action , get_url , server_cost_time , client_cost_time , params , feature , gmt_modified , gmt_created , is_deleted)
+		values
+			<foreach item="data" collection="datas" open="(" separator="," close=")">
+				#{data.id} , #{saasId} , #{ip} , #{userId} , #{referer} , #{goUrl} , #{queryString} , #{goAction} , #{getUrl} , #{serverCostTime} , #{clientCostTime} , #{params} , #{feature} , now() , now() , 0
+			</foreach>
+	</insert>
+	
+	<delete id="delete">
+		update
+			oa_log
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+		and
+			is_deleted = 0
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			oa_log
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+					#{primary}
+				</foreach>
+		and
+			is_deleted = 0
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.opa.OaLogDO">
+		update 
+			oa_log 
+		set 
+			<if test="saasId != null">  
+				saas_id = #{saasId} , 
+			</if> 
+			<if test="ip != null">  
+				ip = #{ip} , 
+			</if> 
+			<if test="userId != null">  
+				user_id = #{userId} , 
+			</if> 
+			<if test="referer != null">  
+				referer = #{referer} , 
+			</if> 
+			<if test="goUrl != null">  
+				go_url = #{goUrl} , 
+			</if> 
+			<if test="queryString != null">  
+				query_string = #{queryString} , 
+			</if> 
+			<if test="goAction != null">  
+				go_action = #{goAction} , 
+			</if> 
+			<if test="getUrl != null">  
+				get_url = #{getUrl} , 
+			</if> 
+			<if test="serverCostTime != null">  
+				server_cost_time = #{serverCostTime} , 
+			</if> 
+			<if test="clientCostTime != null">  
+				client_cost_time = #{clientCostTime} , 
+			</if> 
+			<if test="params != null">  
+				params = #{params} , 
+			</if> 
+			<if test="feature != null">  
+				feature = #{feature} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="resultMapObj">
+		select
+			*
+		from
+			oa_log
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="ip != null and ip != ''">  
+				and ip = #{ip} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+				and user_id = #{userId} 
+			</if>  
+			<if test="referer != null and referer != ''">  
+				and referer = #{referer} 
+			</if>  
+			<if test="goUrl != null and goUrl != ''">  
+				and go_url = #{goUrl} 
+			</if>  
+			<if test="queryString != null and queryString != ''">  
+				and query_string = #{queryString} 
+			</if>  
+			<if test="goAction != null and goAction != ''">  
+				and go_action = #{goAction} 
+			</if>  
+			<if test="getUrl != null and getUrl != ''">  
+				and get_url = #{getUrl} 
+			</if>  
+			<if test="serverCostTime != null and serverCostTime != ''">  
+				and server_cost_time = #{serverCostTime} 
+			</if>  
+			<if test="clientCostTime != null and clientCostTime != ''">  
+				and client_cost_time = #{clientCostTime} 
+			</if>  
+			<if test="params != null and params != ''">  
+				and params = #{params} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+			<if test="query != null and query != '' and query.minId != null and query.minId != ''">  
+				and id &gt;= #{query.minId} 
+			</if>  
+			<if test="query != null and query != '' and query.maxId != null and query.maxId != ''">  
+				and id &lt;= #{query.maxId} 
+			</if>  
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+			order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(1)
+		from
+			oa_log
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="ip != null and ip != ''">  
+				and ip = #{ip} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+				and user_id = #{userId} 
+			</if>  
+			<if test="referer != null and referer != ''">  
+				and referer = #{referer} 
+			</if>  
+			<if test="goUrl != null and goUrl != ''">  
+				and go_url = #{goUrl} 
+			</if>  
+			<if test="queryString != null and queryString != ''">  
+				and query_string = #{queryString} 
+			</if>  
+			<if test="goAction != null and goAction != ''">  
+				and go_action = #{goAction} 
+			</if>  
+			<if test="getUrl != null and getUrl != ''">  
+				and get_url = #{getUrl} 
+			</if>  
+			<if test="serverCostTime != null and serverCostTime != ''">  
+				and server_cost_time = #{serverCostTime} 
+			</if>  
+			<if test="clientCostTime != null and clientCostTime != ''">  
+				and client_cost_time = #{clientCostTime} 
+			</if>  
+			<if test="params != null and params != ''">  
+				and params = #{params} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+			<if test="query != null and query != '' and query.minId != null and query.minId != ''">  
+				and id &gt;= #{query.minId} 
+			</if>  
+			<if test="query != null and query != '' and query.maxId != null and query.maxId != ''">  
+				and id &lt;= #{query.maxId} 
+			</if>  
+	</select>
+
+</mapper> 

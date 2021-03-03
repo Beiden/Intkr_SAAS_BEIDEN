@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  -->
+<mapper namespace="opa_apiTestCase">
+
+	<resultMap id="resultMapObj" type="com.intkr.saas.domain.dbo.opa.ApiTestCaseDO"> 
+		<result property="id" column="id"/> 
+		<result property="apiId" column="api_id"/> 
+		<result property="targetApiId" column="target_api_id"/> 
+		<result property="name" column="name"/> 
+		<result property="apiMethod" column="api_method"/> 
+		<result property="uri" column="uri"/> 
+		<result property="preReq" column="pre_req"/> 
+		<result property="req" column="req"/> 
+		<result property="rsp" column="rsp"/> 
+		<result property="result" column="result"/> 
+		<result property="gmtModified" column="gmt_modified"/> 
+		<result property="gmtCreated" column="gmt_created"/> 
+		<result property="isDeleted" column="is_deleted"/> 
+	</resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.opa.ApiTestCaseDO">
+		insert into
+			a_api_test_case(id , api_id , target_api_id , name , api_method , uri , pre_req , req , rsp , result , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{apiId} , #{targetApiId} , #{name} , #{apiMethod} , #{uri} , #{preReq} , #{req} , #{rsp} , #{result} , now() , now() , 0)
+	</insert>
+
+	<insert id="inserts">
+		insert into
+			a_api_test_case(id , api_id , target_api_id , name , api_method , uri , pre_req , req , rsp , result , gmt_modified , gmt_created , is_deleted)
+		values
+			<foreach item="data" collection="datas" open="(" separator="," close=")">
+				#{data.id} , #{apiId} , #{targetApiId} , #{name} , #{apiMethod} , #{uri} , #{preReq} , #{req} , #{rsp} , #{result} , now() , now() , 0
+			</foreach>
+	</insert>
+	
+	<delete id="delete">
+		update
+			a_api_test_case
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			a_api_test_case
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+					#{primary}
+				</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.opa.ApiTestCaseDO">
+		update 
+			a_api_test_case 
+		set 
+			<if test="apiId != null">  
+				api_id = #{apiId} , 
+			</if> 
+			<if test="targetApiId != null">  
+				target_api_id = #{targetApiId} , 
+			</if> 
+			<if test="name != null">  
+				name = #{name} , 
+			</if> 
+			<if test="apiMethod != null">  
+				api_method = #{apiMethod} , 
+			</if> 
+			<if test="uri != null">  
+				uri = #{uri} , 
+			</if> 
+			<if test="preReq != null">  
+				pre_req = #{preReq} , 
+			</if> 
+			<if test="req != null">  
+				req = #{req} , 
+			</if> 
+			<if test="rsp != null">  
+				rsp = #{rsp} , 
+			</if> 
+			<if test="result != null">  
+				result = #{result} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="resultMapObj">
+		select
+			*
+		from
+			a_api_test_case
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="apiId != null and apiId != ''">  
+				and api_id = #{apiId} 
+			</if>  
+			<if test="targetApiId != null and targetApiId != ''">  
+				and target_api_id = #{targetApiId} 
+			</if>  
+			<if test="name != null and name != ''">  
+				and name = #{name} 
+			</if>  
+			<if test="apiMethod != null and apiMethod != ''">  
+				and api_method = #{apiMethod} 
+			</if>  
+			<if test="uri != null and uri != ''">  
+				and uri = #{uri} 
+			</if>  
+			<if test="preReq != null and preReq != ''">  
+				and pre_req = #{preReq} 
+			</if>  
+			<if test="req != null and req != ''">  
+				and req = #{req} 
+			</if>  
+			<if test="rsp != null and rsp != ''">  
+				and rsp = #{rsp} 
+			</if>  
+			<if test="result != null and result != ''">  
+				and result = #{result} 
+			</if>  
+			<if test="query != null and query != '' and query.minId != null and query.minId != ''">  
+				and id &gt;= #{query.minId} 
+			</if>  
+			<if test="query != null and query != '' and query.maxId != null and query.maxId != ''">  
+				and id &lt;= #{query.maxId} 
+			</if>  
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+			order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(1)
+		from
+			a_api_test_case
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="apiId != null and apiId != ''">  
+				and api_id = #{apiId} 
+			</if>  
+			<if test="targetApiId != null and targetApiId != ''">  
+				and target_api_id = #{targetApiId} 
+			</if>  
+			<if test="name != null and name != ''">  
+				and name = #{name} 
+			</if>  
+			<if test="apiMethod != null and apiMethod != ''">  
+				and api_method = #{apiMethod} 
+			</if>  
+			<if test="uri != null and uri != ''">  
+				and uri = #{uri} 
+			</if>  
+			<if test="preReq != null and preReq != ''">  
+				and pre_req = #{preReq} 
+			</if>  
+			<if test="req != null and req != ''">  
+				and req = #{req} 
+			</if>  
+			<if test="rsp != null and rsp != ''">  
+				and rsp = #{rsp} 
+			</if>  
+			<if test="result != null and result != ''">  
+				and result = #{result} 
+			</if>  
+			<if test="query != null and query != '' and query.minId != null and query.minId != ''">  
+				and id &gt;= #{query.minId} 
+			</if>  
+			<if test="query != null and query != '' and query.maxId != null and query.maxId != ''">  
+				and id &lt;= #{query.maxId} 
+			</if>  
+	</select>
+
+</mapper> 

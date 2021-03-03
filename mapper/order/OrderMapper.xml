@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="order">
+
+	<resultMap id="OrdersDO" type="com.intkr.saas.domain.dbo.order.OrderDO"> 
+        <result property="id" column="id"/> 
+        <result property="saasId" column="saas_id"/> 
+        <result property="shopId" column="shop_id"/> 
+        <result property="pid" column="parend_id"/> 
+        <result property="type" column="type"/> 
+        <result property="fromType" column="from_type"/> 
+        <result property="name" column="name"/> 
+        <result property="deliAddrId" column="deli_addr_id"/> 
+        <result property="userId" column="user_id"/> 
+        <result property="status" column="status"/> 
+        <result property="subStatus" column="sub_status"/> 
+        <result property="deliveryFee" column="delivery_fee"/> 
+        <result property="price" column="price"/> 
+        <result property="note" column="note"/>
+        <result property="payment" column="payment"/> 
+        <result property="payTime" column="pay_time"/> 
+        <result property="sendOutTime" column="send_out_time"/> 
+        <result property="confirmReceiptTime" column="confirm_receipt_time"/> 
+        <result property="commentTime" column="comment_time"/> 
+        <result property="relatedId" column="related_id"/> 
+        <result property="feature" column="feature"/> 
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.order.OrderDO">
+		insert into
+			order_tab(id , saas_id , shop_id , type , pid , name , deli_addr_id , user_id , status , sub_status , price , delivery_fee , payment , pay_time , note , related_id , feature , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{shopId} , #{type} , #{pid} , #{name} , #{deliAddrId} , #{userId} , #{status} , #{subStatus} ,  #{price} , #{deliveryFee} , #{payment} , #{payTime} , #{note} , #{relatedId} , #{feature} , now() , now() , 0)
+			
+	</insert>
+	
+	<delete id="delete">
+		update
+			order_tab
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			order_tab
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.order.OrderDO">
+		update 
+			order_tab 
+		set 
+			<if test="pid != null and pid != ''">  
+			    pid = #{pid} , 
+			</if>  
+			<if test="type != null and type != ''">  
+			    type = #{type} , 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+			    shop_id = #{shopId} , 
+			</if>  
+			<if test="name != null and name != ''">  
+			    name = #{name} , 
+			</if>  
+			<if test="deliAddrId != null and deliAddrId != ''">  
+			    deli_addr_id = #{deliAddrId} , 
+			</if>  
+			<if test="status != null and status != ''">  
+			    status = #{status} , 
+			</if>  
+			<if test="subStatus != null and subStatus != ''">  
+			    sub_status = #{subStatus} , 
+			</if>  
+			<if test="userId != null and userId != ''">  
+			    user_id = #{userId} , 
+			</if>  
+			<if test="deliveryFee != null and deliveryFee != ''">  
+			    delivery_fee = #{deliveryFee} , 
+			</if>   
+			<if test="price != null and price != ''">  
+			    price = #{price} , 
+			</if>  
+			<if test="payment != null and payment != ''">  
+			    payment = #{payment} , 
+			</if>  
+			<if test="payTime != null and payTime != ''">  
+			    pay_time = #{payTime} , 
+			</if>  
+			<if test="sendOutTime != null and sendOutTime != ''">  
+			    send_out_time = #{sendOutTime} , 
+			</if>  
+			<if test="confirmReceiptTime != null and confirmReceiptTime != ''">  
+			    confirm_receipt_time = #{confirmReceiptTime} , 
+			</if>  
+			<if test="commentTime != null and commentTime != ''">  
+			    comment_time = #{commentTime} , 
+			</if>  
+			<if test="note != null and note != ''">  
+			    note = #{note} , 
+			</if>  
+			<if test="relatedId != null and relatedId != ''">  
+			    related_id = #{relatedId} , 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    feature = #{feature} , 
+			</if>  
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="selectByIds" resultMap="OrdersDO">
+		select
+			*
+		from
+			order_tab
+		where 
+			is_deleted = 0
+		and
+			id in 
+			<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+            	#{primary}
+        	</foreach>
+	</select>
+	
+	<select id="select" resultMap="OrdersDO">
+		select
+			*
+		from
+			order_tab
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="pid != null and pid != ''">  
+			    and pid = #{pid} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+			    and shop_id = #{shopId} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="deliAddrId != null and deliAddrId != ''">  
+			    and deli_addr_id = #{deliAddrId} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+			    and user_id = #{userId} 
+			</if> 
+			<if test="status != null and status != ''">  
+			    and status = #{status} 
+			</if> 
+			<if test="subStatus != null and subStatus != ''">  
+			    and sub_status = #{subStatus} 
+			</if> 
+			<if test="price != null and price != ''">  
+			    and price = #{price} 
+			</if> 
+			<if test="deliveryFee != null and deliveryFee != ''">  
+			    and delivery_fee = #{deliveryFee} 
+			</if> 
+			<if test="payTime != null and payTime != ''">  
+			    and pay_time = #{payTime} 
+			</if> 
+			<if test="payment != null and payment != ''">  
+			    and payment = #{payment} 
+			</if> 
+			<if test="sendOutTime != null and sendOutTime != ''">  
+			    and send_out_time = #{sendOutTime} 
+			</if> 
+			<if test="confirmReceiptTime != null and confirmReceiptTime != ''">  
+			    and confirm_receipt_time = #{confirmReceiptTime} 
+			</if> 
+			<if test="note != null and note != ''">  
+			    and note = #{note} 
+			</if> 
+			<if test="relatedId != null and relatedId != ''">  
+			    and related_id = #{relatedId} 
+			</if> 
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if> 
+			<if test="query != null and query != '' and query.dayStart != null and query.dayStart != ''">  
+			    and gmt_created &gt; #{query.dayStart} 
+			</if> 
+			<if test="query != null and query != '' and query.dayEnd != null and query.dayEnd != ''">  
+			    and gmt_created &lt; #{query.dayEnd} 
+			</if> 
+		order by gmt_created desc 
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			order_tab
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="pid != null and pid != ''">  
+			    and pid = #{pid} 
+			</if>  
+			<if test="type != null and type != ''">  
+			    and type = #{type} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+			    and shop_id = #{shopId} 
+			</if>  
+			<if test="name != null and name != ''">  
+			    and name = #{name} 
+			</if>  
+			<if test="deliAddrId != null and deliAddrId != ''">  
+			    and deli_addr_id = #{deliAddrId} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+			    and user_id = #{userId} 
+			</if> 
+			<if test="status != null and status != ''">  
+			    and status = #{status} 
+			</if> 
+			<if test="subStatus != null and subStatus != ''">  
+			    and sub_status = #{subStatus} 
+			</if> 
+			<if test="deliveryFee != null and deliveryFee != ''">  
+			    and delivery_fee = #{deliveryFee} 
+			</if> 
+			<if test="price != null and price != ''">  
+			    and price = #{price} 
+			</if> 
+			<if test="payTime != null and payTime != ''">  
+			    and pay_time = #{payTime} 
+			</if> 
+			<if test="payment != null and payment != ''">  
+			    and payment = #{payment} 
+			</if> 
+			<if test="sendOutTime != null and sendOutTime != ''">  
+			    and send_out_time = #{sendOutTime} 
+			</if> 
+			<if test="confirmReceiptTime != null and confirmReceiptTime != ''">  
+			    and confirm_receipt_time = #{confirmReceiptTime} 
+			</if> 
+			<if test="note != null and note != ''">  
+			    and note = #{note} 
+			</if> 
+			<if test="relatedId != null and relatedId != ''">  
+			    and related_id = #{relatedId} 
+			</if> 
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if> 
+			<if test="query != null and query != '' and query.dayStart != null and query.dayStart != ''">  
+			    and gmt_created &gt; #{query.dayStart} 
+			</if> 
+			<if test="query != null and query != '' and query.dayEnd != null and query.dayEnd != ''">  
+			    and gmt_created &lt; #{query.dayEnd} 
+			</if> 
+	</select>
+	
+	<select id="countGroupByStatus" resultType="java.util.Map">
+		select
+			status,
+			count(1) as count
+		from
+			order_tab
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+			    and saas_id = #{saasId} 
+			</if>  
+			<if test="pid != null and pid != ''">  
+			    and pid = #{pid} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+			    and shop_id = #{shopId} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+			    and user_id = #{userId} 
+			</if> 
+			<if test="status != null and status != ''">  
+			    and status = #{status} 
+			</if> 
+			<if test="query != null and query != '' and query.dayStart != null and query.dayStart != ''">  
+			    and gmt_created &gt; #{query.dayStart} 
+			</if> 
+			<if test="query != null and query != '' and query.dayEnd != null and query.dayEnd != ''">  
+			    and gmt_created &lt; #{query.dayEnd} 
+			</if> 
+		group by
+			status
+	</select>
+
+</mapper> 

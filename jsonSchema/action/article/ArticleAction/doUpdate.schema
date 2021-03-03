@@ -1,0 +1,14 @@
+{
+	"type": "object",
+	"properties": {
+		"id": {
+			"description": "ID",
+			"type": "integer"
+		},
+		"title": {
+			"description": "文档标题",
+			"type": "string"
+		}
+	},
+	"required": ["id", "title"]
+}

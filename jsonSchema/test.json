@@ -1,0 +1,32 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "http://example.com/teacher.schema.json",
+	"title": "老师信息",
+	"description": "柠檬班的一个老师信息",
+	"type": "object",
+	"properties": {
+		"teacherId": {
+			"description": "老师信息的唯一标识符",
+			"type": "integer"
+		},
+		"teacherName": {
+			"description": "老师的名称",
+			"type": "string"
+		},
+		"age": {
+			"description": "老师的年龄",
+			"type": "number",
+			"minimum": 18
+		},
+		"tags": {
+			"description": "老师的标签",
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"minItems": 1,
+			"uniqueItems": true
+		}
+	},
+	"required": ["teacherId", "teacherName", "age"]
+}

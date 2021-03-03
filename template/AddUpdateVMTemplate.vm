@@ -1,0 +1,20 @@
+<div class="panel panel-default margin-bottom-none border-none">
+  <div class="panel-body padding-bottom-none">
+  <form class="form">
+	$!{csrfToken.hiddenField}
+	<input type="hidden" name="saasId" value="$!{_saas.id}"/>
+	<input type="hidden" name="action" value="{{moduleDir}}{{tableClassName}}Action"/>
+  	#if($!{{{tableProName}}})
+	  	<input type="hidden" name="id" value="$!{{{tableProName}}.id}">
+		<input type="hidden" name="event_submit_doUpdate" value="true" />
+	#else
+		<input type="hidden" name="id" value="$!{addId}">
+	  	<input type="hidden" name="event_submit_doAdd" value="true" />
+	#end{{setterString}}
+  </form>
+  </div>
+</div>
+<script type="text/javascript">
+</script>
+<style type="text/css">
+</style>

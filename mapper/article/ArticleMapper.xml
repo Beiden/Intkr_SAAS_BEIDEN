@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="article">
+
+	<resultMap id="resultMapObj" type="com.intkr.saas.domain.dbo.article.ArticleDO"> 
+		<result property="id" column="id"/> 
+		<result property="saasId" column="saas_id"/> 
+		<result property="type" column="type"/> 
+		<result property="form" column="form"/> 
+		<result property="userId" column="user_id"/> 
+		<result property="title" column="title"/> 
+		<result property="status" column="status"/> 
+		<result property="keywords" column="keywords"/> 
+		<result property="description" column="description"/> 
+		<result property="summary" column="summary"/> 
+		<result property="content" column="content"/> 
+		<result property="publicTime" column="public_time"/> 
+		<result property="allowComment" column="allow_comment"/> 
+		<result property="speImgId" column="spe_img_id"/> 
+		<result property="viewCount" column="view_count"/> 
+		<result property="commentCount" column="comment_count"/> 
+		<result property="praiseUpCount" column="praise_up_count"/> 
+		<result property="praiseDownCount" column="praise_down_count"/> 
+		<result property="likeCount" column="like_count"/> 
+		<result property="collectCount" column="collect_count"/> 
+		<result property="attentionCount" column="attention_count"/> 
+		<result property="sort" column="sort"/> 
+		<result property="feature" column="feature"/> 
+		<result property="gmtModified" column="gmt_modified"/> 
+		<result property="gmtCreated" column="gmt_created"/> 
+		<result property="isDeleted" column="is_deleted"/> 
+	</resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.article.ArticleDO">
+		insert into
+			cms_article(id , saas_id , type , form , user_id , title , status , keywords , description , summary , content , public_time , allow_comment , spe_img_id , view_count , comment_count , praise_up_count , praise_down_count , like_count , collect_count , attention_count , sort , feature , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{type} , #{form} , #{userId} , #{title} , #{status} , #{keywords} , #{description} , #{summary} , #{content} , #{publicTime} , #{allowComment} , #{speImgId} , #{viewCount} , #{commentCount} , #{praiseUpCount} , #{praiseDownCount} , #{likeCount} , #{collectCount} , #{attentionCount} , #{sort} , #{feature} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			cms_article
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteReal">
+		delete from
+			cms_article
+		where
+			id = #{primary}
+		limit 1
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			cms_article
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+					#{primary}
+				</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.article.ArticleDO">
+		update 
+			cms_article 
+		set 
+			<if test="type != null">  
+				type = #{type} , 
+			</if> 
+			<if test="form != null">  
+				form = #{form} , 
+			</if> 
+			<if test="userId != null">  
+				user_id = #{userId} , 
+			</if> 
+			<if test="title != null">  
+				title = #{title} , 
+			</if> 
+			<if test="status != null">  
+				status = #{status} , 
+			</if> 
+			<if test="keywords != null">  
+				keywords = #{keywords} , 
+			</if> 
+			<if test="description != null">  
+				description = #{description} , 
+			</if> 
+			<if test="summary != null">  
+				summary = #{summary} , 
+			</if> 
+			<if test="content != null">  
+				content = #{content} , 
+			</if> 
+			<if test="publicTime != null">  
+				public_time = #{publicTime} , 
+			</if> 
+			<if test="allowComment != null">  
+				allow_comment = #{allowComment} , 
+			</if> 
+			<if test="speImgId != null">  
+				spe_img_id = #{speImgId} , 
+			</if> 
+			<if test="viewCount != null">  
+				view_count = #{viewCount} , 
+			</if> 
+			<if test="commentCount != null">  
+				comment_count = #{commentCount} , 
+			</if> 
+			<if test="praiseUpCount != null">  
+				praise_up_count = #{praiseUpCount} , 
+			</if> 
+			<if test="praiseDownCount != null">  
+				praise_down_count = #{praiseDownCount} , 
+			</if> 
+			<if test="likeCount != null">  
+				like_count = #{likeCount} , 
+			</if> 
+			<if test="collectCount != null">  
+				collect_count = #{collectCount} , 
+			</if> 
+			<if test="attentionCount != null">  
+				attention_count = #{attentionCount} , 
+			</if> 
+			<if test="sort != null">  
+				sort = #{sort} , 
+			</if> 
+			<if test="feature != null">  
+				feature = #{feature} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<update id="recover">
+		update 
+			cms_article 
+		set 
+			is_deleted = 0
+		and
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 1
+	</update>
+	
+	<select id="select" resultMap="resultMapObj">
+		select
+			*
+		from
+			cms_article
+		where 
+			0 = 0
+			<if test="isDeleted != null">  
+			    and is_deleted = #{isDeleted} 
+			</if>  
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="type != null and type != ''">  
+				and type = #{type} 
+			</if>  
+			<if test="form != null and form != ''">  
+				and form = #{form} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+				and user_id = #{userId} 
+			</if>  
+			<if test="title != null and title != ''">  
+				and title = #{title} 
+			</if>  
+			<if test="status != null and status != ''">  
+				and status = #{status} 
+			</if>  
+			<if test="keywords != null and keywords != ''">  
+				and keywords = #{keywords} 
+			</if>  
+			<if test="description != null and description != ''">  
+				and description = #{description} 
+			</if>  
+			<if test="summary != null and summary != ''">  
+				and summary = #{summary} 
+			</if>  
+			<if test="content != null and content != ''">  
+				and content = #{content} 
+			</if>  
+			<if test="publicTime != null and publicTime != ''">  
+				and public_time = #{publicTime} 
+			</if>  
+			<if test="allowComment != null and allowComment != ''">  
+				and allow_comment = #{allowComment} 
+			</if>  
+			<if test="speImgId != null and speImgId != ''">  
+				and spe_img_id = #{speImgId} 
+			</if>  
+			<if test="viewCount != null and viewCount != ''">  
+				and view_count = #{viewCount} 
+			</if>  
+			<if test="commentCount != null and commentCount != ''">  
+				and comment_count = #{commentCount} 
+			</if>  
+			<if test="praiseUpCount != null and praiseUpCount != ''">  
+				and praise_up_count = #{praiseUpCount} 
+			</if>  
+			<if test="praiseDownCount != null and praiseDownCount != ''">  
+				and praise_down_count = #{praiseDownCount} 
+			</if>  
+			<if test="likeCount != null and likeCount != ''">  
+				and like_count = #{likeCount} 
+			</if>  
+			<if test="collectCount != null and collectCount != ''">  
+				and collect_count = #{collectCount} 
+			</if>  
+			<if test="attentionCount != null and attentionCount != ''">  
+				and attention_count = #{attentionCount} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+			<if test="query != null and query != '' and query.dayStart != null and query.dayStart != ''">  
+			    and public_time &gt; #{query.dayStart} 
+			</if> 
+			<if test="query != null and query != '' and query.dayEnd != null and query.dayEnd != ''">  
+			    and public_time &lt; #{query.dayEnd} 
+			</if> 
+			<if test="query != null and query != '' and query.minPublicTime != null and query.minPublicTime != ''">  
+			    and public_time &gt; #{query.minPublicTime} 
+			</if> 
+			<if test="query != null and query != '' and query.maxPublicTime != null and query.maxPublicTime != ''">  
+			    and public_time &lt; #{query.maxPublicTime} 
+			</if> 
+			<if test="query != null and query != '' and query.searchWordSQL != null and query.searchWordSQL != ''">  
+			    and 
+			    	(
+			    			title like #{query.searchWordSQL}
+			    		or
+			    			summary like #{query.searchWordSQL}
+			    		or
+			    			content like #{query.searchWordSQL}
+			    	)
+			</if> 
+			<if test="query != null and query != '' and query.categoryId != null and query.categoryId != ''">  
+			    and 
+			    	id in (
+			    		select 
+			    			article_id
+			    		from 
+			    			cms_article_category_related
+			    		where 
+			    			category_id = #{query.categoryId}
+			    		and 
+			    			cms_article_category_related.is_deleted = 0
+			    	)
+			</if> 
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+			order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			cms_article
+		where
+			0 = 0
+			<if test="isDeleted != null">  
+			    and is_deleted = #{isDeleted} 
+			</if>  
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="type != null and type != ''">  
+				and type = #{type} 
+			</if>  
+			<if test="form != null and form != ''">  
+				and form = #{form} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+				and user_id = #{userId} 
+			</if>  
+			<if test="title != null and title != ''">  
+				and title = #{title} 
+			</if>  
+			<if test="status != null and status != ''">  
+				and status = #{status} 
+			</if>  
+			<if test="keywords != null and keywords != ''">  
+				and keywords = #{keywords} 
+			</if>  
+			<if test="description != null and description != ''">  
+				and description = #{description} 
+			</if>  
+			<if test="summary != null and summary != ''">  
+				and summary = #{summary} 
+			</if>  
+			<if test="content != null and content != ''">  
+				and content = #{content} 
+			</if>  
+			<if test="publicTime != null and publicTime != ''">  
+				and public_time = #{publicTime} 
+			</if>  
+			<if test="allowComment != null and allowComment != ''">  
+				and allow_comment = #{allowComment} 
+			</if>  
+			<if test="speImgId != null and speImgId != ''">  
+				and spe_img_id = #{speImgId} 
+			</if>  
+			<if test="viewCount != null and viewCount != ''">  
+				and view_count = #{viewCount} 
+			</if>  
+			<if test="commentCount != null and commentCount != ''">  
+				and comment_count = #{commentCount} 
+			</if>  
+			<if test="praiseUpCount != null and praiseUpCount != ''">  
+				and praise_up_count = #{praiseUpCount} 
+			</if>  
+			<if test="praiseDownCount != null and praiseDownCount != ''">  
+				and praise_down_count = #{praiseDownCount} 
+			</if>  
+			<if test="likeCount != null and likeCount != ''">  
+				and like_count = #{likeCount} 
+			</if>  
+			<if test="collectCount != null and collectCount != ''">  
+				and collect_count = #{collectCount} 
+			</if>  
+			<if test="attentionCount != null and attentionCount != ''">  
+				and attention_count = #{attentionCount} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+			<if test="query != null and query != '' and query.dayStart != null and query.dayStart != ''">  
+			    and public_time &gt; #{query.dayStart} 
+			</if> 
+			<if test="query != null and query != '' and query.dayEnd != null and query.dayEnd != ''">  
+			    and public_time &lt; #{query.dayEnd} 
+			</if> 
+			<if test="query != null and query != '' and query.minPublicTime != null and query.minPublicTime != ''">  
+			    and public_time &gt; #{query.minPublicTime} 
+			</if> 
+			<if test="query != null and query != '' and query.maxPublicTime != null and query.maxPublicTime != ''">  
+			    and public_time &lt; #{query.maxPublicTime} 
+			</if> 
+			<if test="query != null and query != '' and query.searchWordSQL != null and query.searchWordSQL != ''">  
+			    and 
+			    	(
+			    			title like #{query.searchWordSQL}
+			    		or
+			    			summary like #{query.searchWordSQL}
+			    		or
+			    			content like #{query.searchWordSQL}
+			    	)
+			</if> 
+			<if test="query != null and query != '' and query.categoryId != null and query.categoryId != ''">  
+			    and 
+			    	id in (
+			    		select 
+			    			article_id
+			    		from 
+			    			cms_article_category_related
+			    		where 
+			    			category_id = #{query.categoryId}
+			    	)
+			</if> 
+	</select>
+
+</mapper> 

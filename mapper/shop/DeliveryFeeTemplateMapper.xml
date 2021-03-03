@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 运费模版 -->
+<mapper namespace="deliveryFeeTemplate">
+
+	<resultMap id="resultMapObj" type="com.intkr.saas.domain.dbo.shop.DeliveryFeeTemplateDO"> 
+		<result property="id" column="id"/> 
+		<result property="saasId" column="saas_id"/> 
+		<result property="shopId" column="shop_id"/> 
+		<result property="name" column="name"/> 
+		<result property="address" column="address"/> 
+		<result property="sendTime" column="send_time"/> 
+		<result property="freeShipping" column="free_shipping"/> 
+		<result property="valuateType" column="valuate_type"/> 
+		<result property="deliveryType" column="delivery_type"/> 
+		<result property="feature" column="feature"/> 
+		<result property="sort" column="sort"/> 
+		<result property="gmtModified" column="gmt_modified"/> 
+		<result property="gmtCreated" column="gmt_created"/> 
+		<result property="isDeleted" column="is_deleted"/> 
+	</resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.shop.DeliveryFeeTemplateDO">
+		insert into
+			delivery_fee_template(id , saas_id , shop_id , name , address , send_time , free_shipping , valuate_type , delivery_type , feature , sort , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{saasId} , #{shopId} , #{name} , #{address} , #{sendTime} , #{freeShipping} , #{valuateType} , #{deliveryType} , #{feature} , #{sort} , now() , now() , 0)
+	</insert>
+
+	<insert id="inserts">
+		insert into
+			delivery_fee_template(id , saas_id , shop_id , name , address , send_time , free_shipping , valuate_type , delivery_type , feature , sort , gmt_modified , gmt_created , is_deleted)
+		values
+			<foreach item="data" collection="datas" open="(" separator="," close=")">
+				#{data.id} , #{saasId} , #{shopId} , #{name} , #{address} , #{sendTime} , #{freeShipping} , #{valuateType} , #{deliveryType} , #{feature} , #{sort} , now() , now() , 0
+			</foreach>
+	</insert>
+	
+	<delete id="delete">
+		update
+			delivery_fee_template
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+		and
+			is_deleted = 0
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			delivery_fee_template
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+					#{primary}
+				</foreach>
+		and
+			is_deleted = 0
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.shop.DeliveryFeeTemplateDO">
+		update 
+			delivery_fee_template 
+		set 
+			<if test="saasId != null">  
+				saas_id = #{saasId} , 
+			</if> 
+			<if test="shopId != null">  
+				shop_id = #{shopId} , 
+			</if> 
+			<if test="name != null">  
+				name = #{name} , 
+			</if> 
+			<if test="address != null">  
+				address = #{address} , 
+			</if> 
+			<if test="sendTime != null">  
+				send_time = #{sendTime} , 
+			</if> 
+			<if test="freeShipping != null">  
+				free_shipping = #{freeShipping} , 
+			</if> 
+			<if test="valuateType != null">  
+				valuate_type = #{valuateType} , 
+			</if> 
+			<if test="deliveryType != null">  
+				delivery_type = #{deliveryType} , 
+			</if> 
+			<if test="feature != null">  
+				feature = #{feature} , 
+			</if> 
+			<if test="sort != null">  
+				sort = #{sort} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="resultMapObj">
+		select
+			*
+		from
+			delivery_fee_template
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+				and shop_id = #{shopId} 
+			</if>  
+			<if test="name != null and name != ''">  
+				and name = #{name} 
+			</if>  
+			<if test="address != null and address != ''">  
+				and address = #{address} 
+			</if>  
+			<if test="sendTime != null and sendTime != ''">  
+				and send_time = #{sendTime} 
+			</if>  
+			<if test="freeShipping != null and freeShipping != ''">  
+				and free_shipping = #{freeShipping} 
+			</if>  
+			<if test="valuateType != null and valuateType != ''">  
+				and valuate_type = #{valuateType} 
+			</if>  
+			<if test="deliveryType != null and deliveryType != ''">  
+				and delivery_type = #{deliveryType} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+			<if test="sort != null and sort != ''">  
+				and sort = #{sort} 
+			</if>  
+			<if test="query != null and query != '' and query.minId != null and query.minId != ''">  
+				and id &gt;= #{query.minId} 
+			</if>  
+			<if test="query != null and query != '' and query.maxId != null and query.maxId != ''">  
+				and id &lt;= #{query.maxId} 
+			</if>  
+			<if test="query != null and query != '' and query.ids != null and query.ids != ''">  
+			    and 
+			    	id in 
+			    		<foreach item="primary" collection="query.ids" open="(" separator="," close=")">
+							#{primary}
+						</foreach>
+			</if>
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+			order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(1)
+		from
+			delivery_fee_template
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="saasId != null and saasId != ''">  
+				and saas_id = #{saasId} 
+			</if>  
+			<if test="shopId != null and shopId != ''">  
+				and shop_id = #{shopId} 
+			</if>  
+			<if test="name != null and name != ''">  
+				and name = #{name} 
+			</if>  
+			<if test="address != null and address != ''">  
+				and address = #{address} 
+			</if>  
+			<if test="sendTime != null and sendTime != ''">  
+				and send_time = #{sendTime} 
+			</if>  
+			<if test="freeShipping != null and freeShipping != ''">  
+				and free_shipping = #{freeShipping} 
+			</if>  
+			<if test="valuateType != null and valuateType != ''">  
+				and valuate_type = #{valuateType} 
+			</if>  
+			<if test="deliveryType != null and deliveryType != ''">  
+				and delivery_type = #{deliveryType} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+				and feature = #{feature} 
+			</if>  
+			<if test="sort != null and sort != ''">  
+				and sort = #{sort} 
+			</if>  
+			<if test="query != null and query != '' and query.minId != null and query.minId != ''">  
+				and id &gt;= #{query.minId} 
+			</if>  
+			<if test="query != null and query != '' and query.maxId != null and query.maxId != ''">  
+				and id &lt;= #{query.maxId} 
+			</if>  
+			<if test="query != null and query != '' and query.ids != null and query.ids != ''">  
+			    and 
+			    	id in 
+			    		<foreach item="primary" collection="query.ids" open="(" separator="," close=")">
+							#{primary}
+						</foreach>
+			</if>
+	</select>
+
+</mapper> 

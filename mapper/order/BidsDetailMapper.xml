@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bidsDetail">
+
+	<resultMap id="BidsDetailDO" type="com.intkr.kww.domain.dbo.BidsDetailDO"> 
+        <result property="id" column="id"/> 
+        <result property="userId" column="user_id"/>
+        <result property="bidsId" column="bids_id"/>
+        <result property="title" column="title"/>
+        <result property="price" column="price"/>
+        <result property="content" column="content"/>
+        <result property="feature" column="feature"/>
+        <result property="gmtModified" column="gmt_modified"/> 
+        <result property="gmtCreated" column="gmt_created"/> 
+        <result property="isDeleted" column="is_deleted"/> 
+    </resultMap>
+
+	<insert id="insert" parameterType="com.intkr.kww.domain.dbo.BidsDetailDO">
+		insert into
+			ik_bids_detail(id , user_id , bids_id , title , price , content , feature , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{userId} , #{bidsId} , #{title} , #{price} , #{content} , #{feature} , now() , now() , 0)
+	</insert>
+	
+	<delete id="delete">
+		update
+			ik_bids_detail
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			ik_bids_detail
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+	            	#{primary}
+	        	</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.kww.domain.dbo.BidsDetailDO">
+		update 
+			ik_bids_detail 
+		set 
+			<if test="userId != null and userId != ''">  
+			    user_id = #{userId} , 
+			</if>  
+			<if test="bidsId != null and bidsId != ''">  
+			    bids_id = #{bidsId} , 
+			</if>  
+			<if test="title != null and title != ''">  
+			    title = #{title} , 
+			</if>  
+			<if test="price != null and price != ''">  
+			    price = #{price} , 
+			</if>  
+			<if test="content != null and content != ''">  
+			    content = #{content} , 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    feature = #{feature} , 
+			</if>  
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="BidsDetailDO">
+		select
+			*
+		from
+			ik_bids_detail
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+			    and user_id = #{userId} 
+			</if>  
+			<if test="bidsId != null and bidsId != ''">  
+			    and bids_id = #{bidsId} 
+			</if>  
+			<if test="title != null and title != ''">  
+			    and title = #{title} 
+			</if>  
+			<if test="price != null and price != ''">  
+			    and price = #{price} 
+			</if>  
+			<if test="content != null and content != ''">  
+			    and content = #{content} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if> 
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+		    order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if> 
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(id)
+		from
+			ik_bids_detail
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="userId != null and userId != ''">  
+			    and user_id = #{userId} 
+			</if>  
+			<if test="bidsId != null and bidsId != ''">  
+			    and bids_id = #{bidsId} 
+			</if>  
+			<if test="title != null and title != ''">  
+			    and title = #{title} 
+			</if>  
+			<if test="price != null and price != ''">  
+			    and price = #{price} 
+			</if>  
+			<if test="content != null and content != ''">  
+			    and content = #{content} 
+			</if>  
+			<if test="feature != null and feature != ''">  
+			    and feature = #{feature} 
+			</if>  
+	</select>
+
+</mapper> 

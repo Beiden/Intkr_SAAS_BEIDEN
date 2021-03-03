@@ -1,0 +1,44 @@
+package ${Context.clazPackage}module.screen.admin$!{Context.module}.dialog;
+
+#if($Util.containDate($tableDO))
+import java.util.Date;
+
+#end
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ${Context.clazPackage}domain.bo$!{Context.module}.$!{tableDO.getClazName()}BO;
+import com.intkr.saas.client.log.UserLogClient;
+import ${Context.clazPackage}manager$!{Context.module}.$!{tableDO.getClazName()}Manager;
+import com.intkr.saas.util.RequestUtil;
+import com.intkr.saas.util.claz.IOC;
+
+/**
+ * $!{tableDO.desc}
+ * 
+ * @table $!{tableDO.name}
+ * 
+ * @author Beiden
+ * @date $!{Context.getTime()}
+ * @version 1.0
+ */
+public class $!{tableDO.getClazName()}AddUpdate {
+
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	private $!{tableDO.getClazName()}Manager manager = IOC.get($!{tableDO.getClazName()}Manager.class);
+
+	public void execute(HttpServletRequest request, HttpServletResponse response) {
+		String $!{tableDO.getProName()}Id = RequestUtil.getParam(request, "$!{tableDO.getProName()}Id");
+		$!{tableDO.getClazName()}BO $!{tableDO.getProName()} = manager.get($!{tableDO.getProName()}Id);
+		request.setAttribute("$!{tableDO.getProName()}", $!{tableDO.getProName()});
+		if($!{tableDO.getProName()} == null){
+			request.setAttribute("addId", manager.getId());
+		}
+		UserLogClient.log(request, "打开", "$!{tableDO.desc}新增/编辑");
+	}
+
+}

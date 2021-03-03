@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  -->
+<mapper namespace="opa_apiExt">
+
+	<resultMap id="resultMapObj" type="com.intkr.saas.domain.dbo.opa.ApiExtDO"> 
+		<result property="id" column="id"/> 
+		<result property="apiId" column="api_id"/> 
+		<result property="responseExample" column="response_example"/> 
+		<result property="otherContent" column="other_content"/> 
+		<result property="responseType" column="response_type"/> 
+		<result property="preRequestScript" column="pre_request_script"/> 
+		<result property="other" column="other"/> 
+		<result property="otherType" column="other_type"/> 
+		<result property="header" column="header"/> 
+		<result property="body" column="body"/> 
+		<result property="note" column="note"/> 
+		<result property="gmtModified" column="gmt_modified"/> 
+		<result property="gmtCreated" column="gmt_created"/> 
+		<result property="isDeleted" column="is_deleted"/> 
+	</resultMap>
+
+	<insert id="insert" parameterType="com.intkr.saas.domain.dbo.opa.ApiExtDO">
+		insert into
+			a_api_ext(id , api_id , response_example , other_content , response_type , pre_request_script , other , other_type , header , body , note , gmt_modified , gmt_created , is_deleted)
+		values
+			(#{id} , #{apiId} , #{responseExample} , #{otherContent} , #{responseType} , #{preRequestScript} , #{other} , #{otherType} , #{header} , #{body} , #{note} , now() , now() , 0)
+	</insert>
+
+	<insert id="inserts">
+		insert into
+			a_api_ext(id , api_id , response_example , other_content , response_type , pre_request_script , other , other_type , header , body , note , gmt_modified , gmt_created , is_deleted)
+		values
+			<foreach item="data" collection="datas" open="(" separator="," close=")">
+				#{data.id} , #{apiId} , #{responseExample} , #{otherContent} , #{responseType} , #{preRequestScript} , #{other} , #{otherType} , #{header} , #{body} , #{note} , now() , now() , 0
+			</foreach>
+	</insert>
+	
+	<delete id="delete">
+		update
+			a_api_ext
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id = #{primary}
+	</delete>
+	
+	<delete id="deleteAll">
+		update 
+			a_api_ext
+		set 
+			is_deleted = 1 ,
+			gmt_modified = now()
+		where
+			id in 
+				<foreach item="primary" collection="primarys" open="(" separator="," close=")">
+					#{primary}
+				</foreach>
+	</delete>
+	
+	<update id="update" parameterType="com.intkr.saas.domain.dbo.opa.ApiExtDO">
+		update 
+			a_api_ext 
+		set 
+			<if test="apiId != null">  
+				api_id = #{apiId} , 
+			</if> 
+			<if test="responseExample != null">  
+				response_example = #{responseExample} , 
+			</if> 
+			<if test="otherContent != null">  
+				other_content = #{otherContent} , 
+			</if> 
+			<if test="responseType != null">  
+				response_type = #{responseType} , 
+			</if> 
+			<if test="preRequestScript != null">  
+				pre_request_script = #{preRequestScript} , 
+			</if> 
+			<if test="other != null">  
+				other = #{other} , 
+			</if> 
+			<if test="otherType != null">  
+				other_type = #{otherType} , 
+			</if> 
+			<if test="header != null">  
+				header = #{header} , 
+			</if> 
+			<if test="body != null">  
+				body = #{body} , 
+			</if> 
+			<if test="note != null">  
+				note = #{note} , 
+			</if> 
+			gmt_modified = now()
+		where 
+			id = #{id}
+		and
+			is_deleted = 0
+	</update>
+	
+	<select id="select" resultMap="resultMapObj">
+		select
+			*
+		from
+			a_api_ext
+		where 
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="apiId != null and apiId != ''">  
+				and api_id = #{apiId} 
+			</if>  
+			<if test="responseExample != null and responseExample != ''">  
+				and response_example = #{responseExample} 
+			</if>  
+			<if test="otherContent != null and otherContent != ''">  
+				and other_content = #{otherContent} 
+			</if>  
+			<if test="responseType != null and responseType != ''">  
+				and response_type = #{responseType} 
+			</if>  
+			<if test="preRequestScript != null and preRequestScript != ''">  
+				and pre_request_script = #{preRequestScript} 
+			</if>  
+			<if test="other != null and other != ''">  
+				and other = #{other} 
+			</if>  
+			<if test="otherType != null and otherType != ''">  
+				and other_type = #{otherType} 
+			</if>  
+			<if test="header != null and header != ''">  
+				and header = #{header} 
+			</if>  
+			<if test="body != null and body != ''">  
+				and body = #{body} 
+			</if>  
+			<if test="note != null and note != ''">  
+				and note = #{note} 
+			</if>  
+			<if test="query != null and query != '' and query.minId != null and query.minId != ''">  
+				and id &gt;= #{query.minId} 
+			</if>  
+			<if test="query != null and query != '' and query.maxId != null and query.maxId != ''">  
+				and id &lt;= #{query.maxId} 
+			</if>  
+		<if test="query != null and query != '' and query.orderBy != null and query.orderBy != ''">  
+			order by 
+				${query.orderBy} 
+				<if test="query.order != null and query.order != ''">  
+					${query.order} 
+				</if>
+		</if>
+		<if test="_pageSize != null and _pageSize != ''">  
+		   	limit 
+		   		#{_offset} , #{_pageSize}
+		</if> 
+	</select>
+	
+	<select id="count" resultType="java.lang.Long">
+		select
+			count(1)
+		from
+			a_api_ext
+		where
+			is_deleted = 0
+			<if test="id != null and id != ''">  
+			    and id = #{id} 
+			</if>  
+			<if test="apiId != null and apiId != ''">  
+				and api_id = #{apiId} 
+			</if>  
+			<if test="responseExample != null and responseExample != ''">  
+				and response_example = #{responseExample} 
+			</if>  
+			<if test="otherContent != null and otherContent != ''">  
+				and other_content = #{otherContent} 
+			</if>  
+			<if test="responseType != null and responseType != ''">  
+				and response_type = #{responseType} 
+			</if>  
+			<if test="preRequestScript != null and preRequestScript != ''">  
+				and pre_request_script = #{preRequestScript} 
+			</if>  
+			<if test="other != null and other != ''">  
+				and other = #{other} 
+			</if>  
+			<if test="otherType != null and otherType != ''">  
+				and other_type = #{otherType} 
+			</if>  
+			<if test="header != null and header != ''">  
+				and header = #{header} 
+			</if>  
+			<if test="body != null and body != ''">  
+				and body = #{body} 
+			</if>  
+			<if test="note != null and note != ''">  
+				and note = #{note} 
+			</if>  
+			<if test="query != null and query != '' and query.minId != null and query.minId != ''">  
+				and id &gt;= #{query.minId} 
+			</if>  
+			<if test="query != null and query != '' and query.maxId != null and query.maxId != ''">  
+				and id &lt;= #{query.maxId} 
+			</if>  
+	</select>
+
+</mapper> 
