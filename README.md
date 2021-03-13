@@ -211,6 +211,7 @@ src
 
 首页
 
+<<<<<<< HEAD
 ![标题](http://shop.intkr.com/IK/templates/screen/themes/Picture/index.png)
 
 登录页面
@@ -236,3 +237,30 @@ src
 管理后台
 
 ![](http://shop.intkr.com/IK/templates/screen/themes/Picture/mgr-index.png)
+=======
+![标题](http://localhost:16888/IK/templates/screen/themes/Picture/index.png)
+
+登录页面
+
+![](http://localhost:16888/IK/templates/screen/themes/Picture/login.png)
+
+买家后台
+
+![](http://localhost:16888/IK/templates/screen/themes/Picture/admgr-buyer.png)
+
+卖家后台
+
+![](http://localhost:16888/IK/templates/screen/themes/Picture/admgr-seller.png)
+
+小程序首页
+
+![](http://localhost:16888/IK/templates/screen/themes/Picture/m-index.png)
+
+小程序用户中心
+
+![](http://localhost:16888/IK/templates/screen/themes/Picture/m-buyer.png)
+
+管理后台
+
+![](http://localhost:16888/IK/templates/screen/themes/Picture/mgr-index.png)
+>>>>>>> 7abaf26cb6eeaa84b2ce92402fa0894b3660766c
